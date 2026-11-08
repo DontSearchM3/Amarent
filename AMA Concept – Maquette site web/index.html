@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AMA Concept – AMARENT et AMAWASH à Genève</title>
+<meta name="description" content="AMA Concept à Genève : AMARENT pour les reprises de leasing et la location de véhicules, AMAWASH pour le lavage. Roulez ! On s'occupe du reste !">
+<meta name="theme-color" content="#05070c">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AMA Concept – AMARENT et AMAWASH à Genève">
+<meta property="og:description" content="Reprises de leasing, location de véhicules et lavage auto à Genève.">
+<meta property="og:locale" content="fr_CH">
+<!-- À remplacer par https://amaconcept.com/... une fois le domaine relié -->
+<meta property="og:image" content="https://ama-concept.vercel.app/assets/img/og-image.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/img/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/icon-180.png">
+<link rel="stylesheet" href="assets/css/styles.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"AutomotiveBusiness","name":"AMA Concept","telephone":"+41779181527",
+ "logo":"https://ama-concept.vercel.app/assets/img/logo-ama-concept-192.png",
+ "address":{"@type":"PostalAddress","streetAddress":"Route du Bois-de-Bay 105","postalCode":"1242","addressLocality":"Satigny","addressRegion":"GE","addressCountry":"CH"},
+ "openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"00:00","closes":"23:59"},
+ "areaServed":"Genève",
+ "sameAs":["https://www.instagram.com/amaconcept.ge/","https://www.instagram.com/amarent.ge/","https://www.instagram.com/amawash.ch/"],
+ "subOrganization":[{"@type":"AutoRental","name":"AMARENT"},{"@type":"AutoWash","name":"AMAWASH"}]}
+</script>
+<script type="module" src="assets/js/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="a11y.skip">Aller au contenu</a>
+<noscript><p class="noscript">Ce site nécessite JavaScript pour fonctionner.</p></noscript>
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="logo" href="#accueil"><picture><source srcset="assets/img/logo-ama-concept-96.webp 1x, assets/img/logo-ama-concept-192.webp 2x" type="image/webp"><img class="" src="assets/img/logo-ama-concept-96.png" srcset="assets/img/logo-ama-concept-192.png 2x" alt="AMA Concept" height="48" width="87" decoding="async"></picture></a>
+    <nav id="nav" class="nav" aria-label="Navigation principale">
+      <a href="#accueil" data-route="accueil" data-i18n="nav.accueil">Accueil</a>
+      <a href="#leasing" data-route="leasing" data-i18n="nav.leasing">Reprises</a>
+      <a href="#locations" data-route="locations" data-i18n="nav.locations">Locations</a>
+      <a href="#wash" data-route="wash" data-i18n="nav.wash">Wash</a>
+      <a href="#contact" data-route="contact" data-i18n="nav.contact">Contact</a>
+      <a href="#qui" data-route="qui" data-i18n="nav.qui">Qui sommes-nous</a>
+    </nav>
+    <div class="head-tools">
+      <div class="lang" role="group" data-i18n-aria="a11y.lang" aria-label="Langue">
+        <button type="button" data-lang="fr">FR</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="de">DE</button>
+      </div>
+      <button class="burger" id="burger" type="button" aria-controls="nav" aria-expanded="false" data-i18n-aria="a11y.menu" aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+<!-- ================= ACCUEIL ================= -->
+<section class="page" id="accueil" aria-labelledby="h-home">
+  <div class="hero">
+    <div class="wrap">
+      <p class="kicker hero-in" data-i18n="hero.kicker"></p>
+      <h1 id="h-home" class="hero-in d1" data-i18n-html="hero.title"></h1>
+      <p class="hero-text hero-in d2" data-i18n="hero.text"></p>
+      <div class="hero-cta hero-in d2">
+        <a class="btn pulse" href="#leasing" data-i18n="hero.cta_leasing"></a>
+        <a class="btn ghost" href="#locations" data-i18n="hero.cta_rent"></a>
+        <a class="btn ghost" href="#wash" data-i18n="hero.cta_wash"></a>
+      </div>
+      <dl class="hero-stats hero-in d2">
+        <div><dt data-i18n="hero.s1b"></dt><dd data-i18n="hero.s1"></dd></div>
+        <div><dt data-i18n="hero.s2b"></dt><dd data-i18n="hero.s2"></dd></div>
+        <div><dt data-i18n="hero.s3b"></dt><dd data-i18n="hero.s3"></dd></div>
+      </dl>
+    </div>
+  </div>
+  <div class="band" aria-hidden="true"><div id="band"></div></div>
+
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2 class="h3" data-i18n="home.featured"></h2>
+      <a class="link-arrow" href="#leasing" data-i18n="home.all_leasing"></a>
+    </div>
+    <div class="rail-wrap" data-rail="home">
+      <div class="rail" tabindex="0"></div>
+      <div class="rail-bar">
+        <button class="iconbtn" type="button" data-prev data-i18n-aria="rail.prev">&#8592;</button>
+        <div class="track"><div class="thumb"></div></div>
+        <span class="count"></span>
+        <button class="iconbtn" type="button" data-next data-i18n-aria="rail.next">&#8594;</button>
+      </div>
+      <p class="hint" data-i18n="rail.hint"></p>
+    </div>
+
+    <div class="feat">
+      <div class="panel reveal" style="--d:1"><div class="ic">01</div><h3 data-i18n="feat1.t"></h3><p data-i18n="feat1.p"></p></div>
+      <div class="panel reveal" style="--d:2"><div class="ic">02</div><h3 data-i18n="feat2.t"></h3><p data-i18n="feat2.p"></p></div>
+      <div class="panel reveal" style="--d:3"><div class="ic">03</div><h3 data-i18n="feat3.t"></h3><p data-i18n="feat3.p"></p></div>
+    </div>
+
+    <h2 class="h3 section-title reveal" data-i18n="home.brands"></h2>
+    <div class="feat brands">
+      <a class="panel brand-card reveal" style="--d:1" href="#leasing"><div class="brand-logo"><picture><source srcset="assets/img/logo-ama-concept-96.webp 1x, assets/img/logo-ama-concept-192.webp 2x" type="image/webp"><img class="" src="assets/img/logo-ama-concept-96.png" srcset="assets/img/logo-ama-concept-192.png 2x" alt="" height="64" width="116" decoding="async"></picture></div><h3>AMA Concept</h3><p data-i18n="brand.group"></p><span class="link-arrow" data-i18n="brand.discover"></span></a>
+      <a class="panel brand-card reveal" style="--d:2" href="#locations"><div class="brand-logo"><picture><source srcset="assets/img/logo-amarent-96.webp 1x, assets/img/logo-amarent-192.webp 2x" type="image/webp"><img class="" src="assets/img/logo-amarent-96.png" srcset="assets/img/logo-amarent-192.png 2x" alt="" height="64" width="116" decoding="async"></picture></div><h3>AMARENT</h3><p data-i18n="brand.rent"></p><span class="link-arrow" data-i18n="brand.discover"></span></a>
+      <a class="panel brand-card reveal" style="--d:3" href="#wash"><div class="brand-logo"><picture><source srcset="assets/img/logo-amawash-96.webp 1x, assets/img/logo-amawash-192.webp 2x" type="image/webp"><img class="" src="assets/img/logo-amawash-96.png" srcset="assets/img/logo-amawash-192.png 2x" alt="" height="64" width="116" decoding="async"></picture></div><h3>AMAWASH</h3><p data-i18n="brand.wash"></p><span class="link-arrow" data-i18n="brand.discover"></span></a>
+    </div>
+
+    <section class="reviews reveal" id="reviewsBlock" aria-labelledby="h-reviews">
+      <div class="section-head">
+        <div>
+          <p class="kicker" data-i18n="reviews.kicker"></p>
+          <h2 id="h-reviews" data-i18n="reviews.title"></h2>
+          <div id="reviewSummary" class="review-summary"></div>
+        </div>
+        <div class="row-actions">
+          <a class="btn" href="#avis" data-i18n="reviews.leave"></a>
+          <a class="btn ghost hidden" id="googleReviewBtn" target="_blank" rel="noopener" data-i18n="reviews.google"></a>
+        </div>
+      </div>
+      <div id="reviewList" class="review-list"></div>
+    </section>
+  </div>
+</section>
+
+<!-- ================= REPRISES DE LEASING ================= -->
+<section class="page" id="leasing" aria-labelledby="h-leasing">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="page-logo"><picture><source srcset="assets/img/logo-ama-concept-96.webp 1x, assets/img/logo-ama-concept-192.webp 2x" type="image/webp"><img class="" src="assets/img/logo-ama-concept-96.png" srcset="assets/img/logo-ama-concept-192.png 2x" alt="AMA Concept" height="56" width="102" decoding="async"></picture></div>
+      <p class="kicker" data-i18n="leasing.kicker"></p>
+      <h1 id="h-leasing" class="h2" data-i18n="leasing.title"></h1>
+      <p class="lead" data-i18n="leasing.lead"></p>
+    </div>
+    <div class="filters reveal">
+      <div><label for="fBody" data-i18n="filter.body"></label><select id="fBody"></select></div>
+      <div><label for="fSort" data-i18n="filter.sort"></label><select id="fSort"></select></div>
+    </div>
+    <div class="rail-wrap" data-rail="leasing">
+      <div class="rail" tabindex="0"></div>
+      <div class="rail-bar">
+        <button class="iconbtn" type="button" data-prev data-i18n-aria="rail.prev">&#8592;</button>
+        <div class="track"><div class="thumb"></div></div>
+        <span class="count"></span>
+        <button class="iconbtn" type="button" data-next data-i18n-aria="rail.next">&#8594;</button>
+      </div>
+    </div>
+    <div class="grid2 mt-xl">
+      <div class="panel reveal">
+        <h2 class="h3 mb" data-i18n="leasing.cond_title"></h2>
+        <ul class="checks"><li data-i18n="leasing.cond1"></li><li data-i18n="leasing.cond2"></li><li data-i18n="leasing.cond3"></li></ul>
+      </div>
+      <div class="panel reveal" style="--d:1">
+        <h2 class="h3 mb" data-i18n="leasing.how_title"></h2>
+        <ol class="checks numbered"><li data-i18n="leasing.how1"></li><li data-i18n="leasing.how2"></li><li data-i18n="leasing.how3"></li></ol>
+      </div>
+    </div>
+    <p class="fine mt" data-i18n="legal.lcd"></p>
+  </div>
+</section>
+
+<!-- ================= LOCATIONS ================= -->
+<section class="page" id="locations" aria-labelledby="h-rent">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="page-logo"><picture><source srcset="assets/img/logo-amarent-96.webp 1x, assets/img/logo-amarent-192.webp 2x" type="image/webp"><img class="" src="assets/img/logo-amarent-96.png" srcset="assets/img/logo-amarent-192.png 2x" alt="AMARENT" height="56" width="102" decoding="async"></picture></div>
+      <p class="kicker" data-i18n="rent.kicker"></p>
+      <h1 id="h-rent" class="h2" data-i18n="rent.title"></h1>
+      <p class="lead" data-i18n="rent.lead"></p>
+    </div>
+    <p class="notice reveal" data-i18n="rent.notice"></p>
+
+    <div class="steps reveal"><i>1</i><h2 class="h3" data-i18n="rent.step1"></h2></div>
+    <div class="rentgrid" id="rentGrid"></div>
+
+    <div class="steps reveal"><i>2</i><h2 class="h3" data-i18n="rent.step2"></h2></div>
+    <div class="offers" id="offers" role="radiogroup"></div>
+
+    <div class="steps reveal"><i>3</i><h2 class="h3" data-i18n="rent.step3"></h2></div>
+    <div class="grid2">
+      <div class="panel reveal">
+        <div class="cal-head">
+          <button class="iconbtn" type="button" id="prevMonth" data-i18n-aria="cal.prev">&#8592;</button>
+          <b id="monthLabel" aria-live="polite"></b>
+          <button class="iconbtn" type="button" id="nextMonth" data-i18n-aria="cal.next">&#8594;</button>
+        </div>
+        <div class="days" id="days"></div>
+        <div class="legend">
+          <span><i class="lg-free"></i><span data-i18n="cal.available"></span></span>
+          <span><i class="lg-booked"></i><span data-i18n="cal.booked"></span></span>
+          <span><i class="lg-pend"></i><span data-i18n="cal.pending"></span></span>
+          <span><i class="lg-sel"></i><span data-i18n="cal.start"></span></span>
+        </div>
+        <div class="booked-list" id="bookedList"></div>
+      </div>
+
+      <div class="reveal" style="--d:1">
+        <div class="sum" id="sum" aria-live="polite"></div>
+        <form class="panel mt" id="resaForm" novalidate>
+          <h2 class="h3 mb" data-i18n="form.request"></h2>
+          <div class="row2">
+            <div class="field"><label for="rName" data-i18n="form.name"></label><input id="rName" name="name" required autocomplete="name" data-i18n-ph="form.name_ph"></div>
+            <div class="field"><label for="rTel" data-i18n="form.phone"></label><input id="rTel" name="tel" type="tel" required autocomplete="tel" data-i18n-ph="form.phone_ph"></div>
+          </div>
+          <div class="field"><label for="rMail" data-i18n="form.email"></label><input id="rMail" name="email" type="email" required autocomplete="email" data-i18n-ph="form.email_ph"></div>
+          <div class="field"><label for="rNote" data-i18n="form.note"></label><textarea id="rNote" name="note" rows="2" data-i18n-ph="form.note_rent"></textarea></div>
+          <ul class="checks small"><li data-i18n="cond.deposit"></li><li data-i18n="cond.age"></li></ul>
+          <label class="check"><input type="checkbox" id="rCgv" required><span data-i18n-html="form.cgv"></span></label>
+          <p class="fine" data-i18n-html="form.privacy"></p>
+          <button class="btn block" type="submit" data-i18n="form.request"></button>
+          <p class="msg" id="resaMsg" role="status"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WASH ================= -->
+<section class="page" id="wash" aria-labelledby="h-wash">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="page-logo"><picture><source srcset="assets/img/logo-amawash-96.webp 1x, assets/img/logo-amawash-192.webp 2x" type="image/webp"><img class="" src="assets/img/logo-amawash-96.png" srcset="assets/img/logo-amawash-192.png 2x" alt="AMAWASH" height="56" width="102" decoding="async"></picture></div>
+      <p class="kicker" data-i18n="wash.kicker"></p>
+      <h1 id="h-wash" class="h2" data-i18n="wash.title"></h1>
+      <p class="lead" data-i18n="wash.lead"></p>
+    </div>
+
+    <div class="steps reveal"><i>1</i><h2 class="h3" data-i18n="wash.step1"></h2></div>
+    <div class="panel reveal">
+      <form class="row2 align-end" id="wDetectForm">
+        <div class="field">
+          <label for="wModel" data-i18n="wash.model"></label>
+          <input id="wModel" list="modelList" autocomplete="off" data-i18n-ph="wash.model_ph">
+          <datalist id="modelList"></datalist>
+        </div>
+        <div class="field"><button class="btn block" type="submit" data-i18n="wash.detect"></button></div>
+      </form>
+      <div id="wDetected" aria-live="polite"></div>
+      <p class="label mt" data-i18n="wash.cat"></p>
+      <div class="catbtns" id="catBtns" role="radiogroup"></div>
+      <p class="hint" data-i18n="wash.cat_hint"></p>
+    </div>
+
+    <div class="steps reveal"><i>2</i><h2 class="h3" data-i18n="wash.step2"></h2></div>
+    <div class="svcs" id="svcs"></div>
+    <div class="basket reveal">
+      <div><small data-i18n="wash.selection"></small><div id="basketTxt" class="basket-txt"></div></div>
+      <div class="total-big" id="basketTotal" aria-live="polite">0 CHF</div>
+    </div>
+
+    <div class="steps reveal"><i>3</i><h2 class="h3" data-i18n="wash.step3"></h2></div>
+    <form class="panel reveal" id="washForm" novalidate>
+      <div class="row2">
+        <div class="field"><label for="wName" data-i18n="form.name"></label><input id="wName" required autocomplete="name" data-i18n-ph="form.name_ph"></div>
+        <div class="field"><label for="wTel" data-i18n="form.phone"></label><input id="wTel" type="tel" required autocomplete="tel" data-i18n-ph="form.phone_ph"></div>
+      </div>
+      <div class="row3">
+        <div class="field"><label for="wDate" data-i18n="wash.date"></label><input id="wDate" type="date" required></div>
+        <div class="field"><label for="wSlot" data-i18n="wash.slot"></label>
+          <select id="wSlot"><option value="morning" data-i18n="slot.morning"></option><option value="afternoon" data-i18n="slot.afternoon"></option><option value="evening" data-i18n="slot.evening"></option></select></div>
+        <div class="field"><label for="wPlace" data-i18n="wash.place"></label><input id="wPlace" readonly class="readonly"></div>
+      </div>
+      <div class="field"><label for="wNote" data-i18n="form.note"></label><textarea id="wNote" rows="2" data-i18n-ph="wash.note_ph"></textarea></div>
+      <label class="check"><input type="checkbox" id="wCgv" required><span data-i18n-html="form.cgv"></span></label>
+      <p class="fine" data-i18n-html="form.privacy"></p>
+      <button class="btn block" type="submit" data-i18n="wash.submit"></button>
+      <p class="msg" id="washMsg" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="page" id="contact" aria-labelledby="h-contact">
+  <div class="wrap grid2">
+    <div class="reveal">
+      <p class="kicker" data-i18n="contact.kicker"></p>
+      <h1 id="h-contact" class="h2" data-i18n="contact.title"></h1>
+      <p class="lead" data-i18n="contact.lead"></p>
+      <form class="panel" id="contactForm" novalidate>
+        <div class="row2">
+          <div class="field"><label for="cName" data-i18n="form.name"></label><input id="cName" required autocomplete="name" data-i18n-ph="form.name_ph"></div>
+          <div class="field"><label for="cMail" data-i18n="form.email"></label><input id="cMail" type="email" required autocomplete="email" data-i18n-ph="form.email_ph"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label for="cTel" data-i18n="form.phone"></label><input id="cTel" type="tel" autocomplete="tel" data-i18n-ph="form.phone_ph"></div>
+          <div class="field"><label for="cMotif" data-i18n="contact.motif"></label><select id="cMotif" required></select></div>
+        </div>
+        <div class="field"><label for="cVeh" data-i18n="contact.vehicle"></label><select id="cVeh"></select></div>
+        <div class="field"><label for="cMsg" data-i18n="contact.message"></label><textarea id="cMsg" rows="5" required data-i18n-ph="contact.message_ph"></textarea></div>
+        <p class="fine" data-i18n-html="form.privacy"></p>
+        <button class="btn block" type="submit" data-i18n="contact.submit"></button>
+        <p class="msg" id="cMsgOut" role="status"></p>
+      </form>
+    </div>
+    <div class="reveal contact-side" style="--d:1" id="contactInfo"></div>
+  </div>
+</section>
+
+<!-- ================= QUI SOMMES-NOUS ================= -->
+<section class="page" id="qui" aria-labelledby="h-about">
+  <div class="wrap grid2">
+    <div class="reveal">
+      <p class="kicker" data-i18n="about.kicker"></p>
+      <h1 id="h-about" class="h2" data-i18n="about.title"></h1>
+      <p class="lead" data-i18n="about.lead"></p>
+      <p data-i18n="about.text"></p>
+      <p class="slogan" data-i18n="slogan"></p>
+    </div>
+    <div class="reveal" style="--d:1">
+      <h2 class="h3 mb" data-i18n="faq.title"></h2>
+      <details><summary data-i18n="faq.q1"></summary><p data-i18n="faq.a1"></p></details>
+      <details><summary data-i18n="faq.q2"></summary><p data-i18n="faq.a2"></p></details>
+      <details><summary data-i18n="faq.q3"></summary><p data-i18n="faq.a3"></p></details>
+      <details><summary data-i18n="faq.q4"></summary><p data-i18n="faq.a4"></p></details>
+      <details><summary data-i18n="faq.q5"></summary><p data-i18n="faq.a5"></p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PAGES LÉGALES ================= -->
+<section class="page" id="legal">
+  <div class="wrap narrow">
+    <p class="notice hidden" id="legalLangNotice" data-i18n="legal.fr_only"></p>
+    <article class="legal" id="legalContent"></article>
+    <p class="mt-xl"><a class="link-arrow" href="#accueil" data-i18n="legal.back"></a></p>
+  </div>
+</section>
+
+<!-- ================= ESPACE PARTENAIRE ================= -->
+<section class="page" id="admin" aria-label="Espace partenaire">
+  <div id="adminRoot"></div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div class="f-brand">
+        <a class="logo" href="#accueil"><picture><source srcset="assets/img/logo-ama-concept-96.webp 1x, assets/img/logo-ama-concept-192.webp 2x" type="image/webp"><img class="" src="assets/img/logo-ama-concept-96.png" srcset="assets/img/logo-ama-concept-192.png 2x" alt="AMA Concept" height="56" width="102" decoding="async"></picture></a>
+        <p data-i18n="slogan"></p>
+        <p class="f-sub">AMARENT · AMAWASH</p>
+      </div>
+      <div><h2 class="f-h" data-i18n="footer.nav"></h2>
+        <a href="#leasing" data-i18n="nav.leasing"></a><a href="#locations" data-i18n="nav.locations"></a><a href="#wash" data-i18n="nav.wash"></a><a href="#contact" data-i18n="nav.contact"></a><a href="#qui" data-i18n="nav.qui"></a><a href="#avis" data-i18n="footer.review"></a>
+      </div>
+      <div><h2 class="f-h" data-i18n="footer.contact"></h2><div id="footerContact"></div></div>
+      <div><h2 class="f-h" data-i18n="footer.legal"></h2>
+        <a href="#mentions-legales" data-i18n="footer.mentions"></a><a href="#cgv" data-i18n="footer.cgv"></a><a href="#confidentialite" data-i18n="footer.privacy"></a>
+        <button type="button" class="linklike" id="cookieSettings" data-i18n="footer.cookies"></button>
+      </div>
+    </div>
+    <div class="copy"><span>© <span id="year"></span> AMA Concept · AMARENT · AMAWASH. <span data-i18n="footer.rights"></span></span><a href="#admin" data-i18n="footer.partner"></a></div>
+  </div>
+</footer>
+
+<!-- Fiche véhicule -->
+<dialog class="dialog dialog-lg" id="vehDialog" aria-labelledby="vehTitle">
+  <button class="dialog-x" type="button" data-close data-i18n-aria="a11y.close">&times;</button>
+  <div id="vehBody"></div>
+</dialog>
+
+<!-- Avis -->
+<dialog class="dialog" id="reviewDialog" aria-labelledby="rvTitle">
+  <button class="dialog-x" type="button" data-close data-i18n-aria="a11y.close">&times;</button>
+  <form class="dialog-body" id="reviewForm" novalidate>
+    <h2 id="rvTitle" class="h3" data-i18n="rv.title"></h2>
+    <p class="muted" data-i18n="rv.lead"></p>
+    <fieldset class="star-input">
+      <legend class="label" data-i18n="rv.rating"></legend>
+      <div class="stars-pick" id="starsPick"></div>
+    </fieldset>
+    <div class="row2">
+      <div class="field"><label for="rvName" data-i18n="rv.name"></label><input id="rvName" required maxlength="40" autocomplete="given-name"></div>
+      <div class="field"><label for="rvService" data-i18n="rv.service"></label>
+        <select id="rvService"><option value="rent" data-i18n="rv.s_rent"></option><option value="leasing" data-i18n="rv.s_leasing"></option><option value="wash" data-i18n="rv.s_wash"></option><option value="other" data-i18n="rv.s_other"></option></select></div>
+    </div>
+    <div class="field"><label for="rvText" data-i18n="rv.text"></label><textarea id="rvText" rows="4" required minlength="10" maxlength="800" data-i18n-ph="rv.text_ph"></textarea></div>
+    <label class="check"><input type="checkbox" id="rvConsent" required><span data-i18n="rv.consent"></span></label>
+    <button class="btn block" type="submit" data-i18n="rv.submit"></button>
+    <p class="msg" id="rvMsg" role="status"></p>
+  </form>
+</dialog>
+
+<a class="wa-fab" id="waFab" target="_blank" rel="noopener" data-i18n-aria="wa.label" aria-label="WhatsApp">
+  <svg viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16 3C8.8 3 3 8.7 3 15.8c0 2.5.7 4.9 2 7L3 29l6.4-2c2 1.1 4.3 1.7 6.6 1.7 7.2 0 13-5.7 13-12.8S23.2 3 16 3zm0 23.4c-2.1 0-4.1-.6-5.9-1.7l-.4-.3-3.8 1.2 1.2-3.7-.3-.4a10.4 10.4 0 0 1-1.8-5.7C5 10 9.9 5.3 16 5.3S27 10 27 15.8s-4.9 10.6-11 10.6zm6-7.9c-.3-.2-2-1-2.3-1.1-.3-.1-.5-.2-.8.2l-1 1.3c-.2.2-.4.2-.7.1a8.7 8.7 0 0 1-4.3-3.7c-.3-.6.3-.5.9-1.7.1-.2 0-.4 0-.6l-1-2.5c-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.2 2.4 3.7 5.9 5.2 2.2.9 3 1 4.1.8.7-.1 2-.8 2.3-1.6.3-.8.3-1.4.2-1.6-.1-.1-.3-.2-.6-.3z"/></svg>
+</a>
+
+<div class="cookie-bar" id="cookieBar" role="region" aria-label="Cookies" hidden>
+  <p data-i18n="cookie.text"></p>
+  <div class="row-actions">
+    <a class="link-arrow" href="#confidentialite" data-i18n="cookie.more"></a>
+    <button class="btn ghost sm" type="button" id="cookieNecessary" data-i18n="cookie.necessary"></button>
+    <button class="btn sm" type="button" id="cookieAccept" data-i18n="cookie.accept"></button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
