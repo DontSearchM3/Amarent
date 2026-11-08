@@ -10,12 +10,21 @@
 <meta property="og:title" content="AMA Concept – AMARENT et AMAWASH à Genève">
 <meta property="og:description" content="Reprises de leasing, location de véhicules et lavage auto à Genève.">
 <meta property="og:locale" content="fr_CH">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2305070c'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='900' font-size='26' text-anchor='middle' fill='%232f6bff'%3EAMA%3C/text%3E%3C/svg%3E">
+<!-- À remplacer par https://amaconcept.com/... une fois le domaine relié -->
+<meta property="og:image" content="https://ama-concept.vercel.app/assets/img/og-image.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/img/icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/icon-180.png">
 <link rel="stylesheet" href="assets/css/styles.css">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Organization","name":"AMA Concept","telephone":"+41766258580","areaServed":"Genève",
- "address":{"@type":"PostalAddress","addressLocality":"Genève","addressCountry":"CH"},
- "subOrganization":[{"@type":"AutoRental","name":"AMARENT","telephone":"+41766258580"},{"@type":"AutoWash","name":"AMAWASH"}]}
+{"@context":"https://schema.org","@type":"AutomotiveBusiness","name":"AMA Concept","telephone":"+41779181527",
+ "logo":"https://ama-concept.vercel.app/assets/img/logo-ama-concept-192.png",
+ "address":{"@type":"PostalAddress","streetAddress":"Route du Bois-de-Bay 105","postalCode":"1242","addressLocality":"Satigny","addressRegion":"GE","addressCountry":"CH"},
+ "openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"00:00","closes":"23:59"},
+ "areaServed":"Genève",
+ "sameAs":["https://www.instagram.com/amaconcept.ge/","https://www.instagram.com/amarent.ge/","https://www.instagram.com/amawash.ch/"],
+ "subOrganization":[{"@type":"AutoRental","name":"AMARENT"},{"@type":"AutoWash","name":"AMAWASH"}]}
 </script>
 <script type="module" src="assets/js/app.js"></script>
 </head>
@@ -25,10 +34,7 @@
 
 <header class="site-header">
   <div class="wrap bar">
-    <a class="logo" href="#accueil" aria-label="AMA Concept">
-      <span class="mk"><span class="a">A</span><span class="m">M</span><span class="a">A</span></span>
-      <small>Concept</small>
-    </a>
+    <a class="logo" href="#accueil"><picture><source srcset="assets/img/logo-ama-concept-96.webp 1x, assets/img/logo-ama-concept-192.webp 2x" type="image/webp"><img class="" src="assets/img/logo-ama-concept-96.png" srcset="assets/img/logo-ama-concept-192.png 2x" alt="AMA Concept" height="48" width="87" decoding="async"></picture></a>
     <nav id="nav" class="nav" aria-label="Navigation principale">
       <a href="#accueil" data-route="accueil" data-i18n="nav.accueil">Accueil</a>
       <a href="#leasing" data-route="leasing" data-i18n="nav.leasing">Reprises</a>
@@ -93,9 +99,9 @@
 
     <h2 class="h3 section-title reveal" data-i18n="home.brands"></h2>
     <div class="feat brands">
-      <a class="panel brand-card reveal" style="--d:1" href="#locations"><div class="ic">AR</div><h3>AMARENT</h3><p data-i18n="brand.rent"></p><span class="link-arrow" data-i18n="brand.discover"></span></a>
-      <a class="panel brand-card reveal" style="--d:2" href="#wash"><div class="ic">AW</div><h3>AMAWASH</h3><p data-i18n="brand.wash"></p><span class="link-arrow" data-i18n="brand.discover"></span></a>
-      <div class="panel brand-card reveal" style="--d:3"><div class="ic">AC</div><h3>AMA Concept</h3><p data-i18n="brand.group"></p></div>
+      <a class="panel brand-card reveal" style="--d:1" href="#leasing"><div class="brand-logo"><picture><source srcset="assets/img/logo-ama-concept-96.webp 1x, assets/img/logo-ama-concept-192.webp 2x" type="image/webp"><img class="" src="assets/img/logo-ama-concept-96.png" srcset="assets/img/logo-ama-concept-192.png 2x" alt="" height="64" width="116" decoding="async"></picture></div><h3>AMA Concept</h3><p data-i18n="brand.group"></p><span class="link-arrow" data-i18n="brand.discover"></span></a>
+      <a class="panel brand-card reveal" style="--d:2" href="#locations"><div class="brand-logo"><picture><source srcset="assets/img/logo-amarent-96.webp 1x, assets/img/logo-amarent-192.webp 2x" type="image/webp"><img class="" src="assets/img/logo-amarent-96.png" srcset="assets/img/logo-amarent-192.png 2x" alt="" height="64" width="116" decoding="async"></picture></div><h3>AMARENT</h3><p data-i18n="brand.rent"></p><span class="link-arrow" data-i18n="brand.discover"></span></a>
+      <a class="panel brand-card reveal" style="--d:3" href="#wash"><div class="brand-logo"><picture><source srcset="assets/img/logo-amawash-96.webp 1x, assets/img/logo-amawash-192.webp 2x" type="image/webp"><img class="" src="assets/img/logo-amawash-96.png" srcset="assets/img/logo-amawash-192.png 2x" alt="" height="64" width="116" decoding="async"></picture></div><h3>AMAWASH</h3><p data-i18n="brand.wash"></p><span class="link-arrow" data-i18n="brand.discover"></span></a>
     </div>
 
     <section class="reviews reveal" id="reviewsBlock" aria-labelledby="h-reviews">
@@ -119,11 +125,11 @@
 <section class="page" id="leasing" aria-labelledby="h-leasing">
   <div class="wrap">
     <div class="reveal">
+      <div class="page-logo"><picture><source srcset="assets/img/logo-ama-concept-96.webp 1x, assets/img/logo-ama-concept-192.webp 2x" type="image/webp"><img class="" src="assets/img/logo-ama-concept-96.png" srcset="assets/img/logo-ama-concept-192.png 2x" alt="AMA Concept" height="56" width="102" decoding="async"></picture></div>
       <p class="kicker" data-i18n="leasing.kicker"></p>
       <h1 id="h-leasing" class="h2" data-i18n="leasing.title"></h1>
       <p class="lead" data-i18n="leasing.lead"></p>
     </div>
-    <p class="notice reveal" data-i18n="demo.notice"></p>
     <div class="filters reveal">
       <div><label for="fBody" data-i18n="filter.body"></label><select id="fBody"></select></div>
       <div><label for="fSort" data-i18n="filter.sort"></label><select id="fSort"></select></div>
@@ -155,6 +161,7 @@
 <section class="page" id="locations" aria-labelledby="h-rent">
   <div class="wrap">
     <div class="reveal">
+      <div class="page-logo"><picture><source srcset="assets/img/logo-amarent-96.webp 1x, assets/img/logo-amarent-192.webp 2x" type="image/webp"><img class="" src="assets/img/logo-amarent-96.png" srcset="assets/img/logo-amarent-192.png 2x" alt="AMARENT" height="56" width="102" decoding="async"></picture></div>
       <p class="kicker" data-i18n="rent.kicker"></p>
       <h1 id="h-rent" class="h2" data-i18n="rent.title"></h1>
       <p class="lead" data-i18n="rent.lead"></p>
@@ -210,6 +217,7 @@
 <section class="page" id="wash" aria-labelledby="h-wash">
   <div class="wrap">
     <div class="reveal">
+      <div class="page-logo"><picture><source srcset="assets/img/logo-amawash-96.webp 1x, assets/img/logo-amawash-192.webp 2x" type="image/webp"><img class="" src="assets/img/logo-amawash-96.png" srcset="assets/img/logo-amawash-192.png 2x" alt="AMAWASH" height="56" width="102" decoding="async"></picture></div>
       <p class="kicker" data-i18n="wash.kicker"></p>
       <h1 id="h-wash" class="h2" data-i18n="wash.title"></h1>
       <p class="lead" data-i18n="wash.lead"></p>
@@ -327,7 +335,7 @@
   <div class="wrap">
     <div class="cols">
       <div class="f-brand">
-        <a class="logo" href="#accueil" aria-label="AMA Concept"><span class="mk"><span class="a">A</span><span class="m">M</span><span class="a">A</span></span><small>Concept</small></a>
+        <a class="logo" href="#accueil"><picture><source srcset="assets/img/logo-ama-concept-96.webp 1x, assets/img/logo-ama-concept-192.webp 2x" type="image/webp"><img class="" src="assets/img/logo-ama-concept-96.png" srcset="assets/img/logo-ama-concept-192.png 2x" alt="AMA Concept" height="56" width="102" decoding="async"></picture></a>
         <p data-i18n="slogan"></p>
         <p class="f-sub">AMARENT · AMAWASH</p>
       </div>
