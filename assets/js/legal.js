@@ -35,7 +35,7 @@ function mentions(s) {
   <p>Responsable de la publication : Mustapha Yildrim ${TBD('fonction')}.</p>
 
   <h2>Activités et marques</h2>
-  <p>AMARENT (reprises de leasing et location de véhicules) et AMAWASH (lavage et soin de véhicules) sont des activités d'AMA Concept ${TBD('préciser : sociétés distinctes ou raisons de commerce d\'AMA Concept')}.</p>
+  <p>AMA Concept (leasing et reprises de leasing), AMARENT (location de véhicules) et AMAWASH (lavage et soin de véhicules) sont des activités d'AMA Concept. AMARENT et AMAWASH sont des noms commerciaux d'AMA Concept et ne constituent pas des sociétés distinctes.</p>
 
   <h2>Hébergement</h2>
   <p>${TBD('hébergeur et adresse – prévu : Firebase Hosting, Google')}</p>
@@ -61,7 +61,7 @@ function cgv(s) {
   ${DISCLAIMER}
 
   <h2>1. Champ d'application</h2>
-  <p>Les présentes conditions générales (ci-après « CG ») s'appliquent aux prestations proposées par AMA Concept, ${c.address}, sous les marques AMARENT (location de véhicules et reprises de leasing) et AMAWASH (lavage et soin de véhicules). En envoyant une demande depuis ce site, le client déclare avoir pris connaissance des présentes CG et les accepter.</p>
+  <p>Les présentes conditions générales (ci-après « CG ») s'appliquent aux prestations proposées par AMA Concept, ${c.address}, sous son propre nom pour le leasing et les reprises de leasing, et sous les marques AMARENT (location de véhicules) et AMAWASH (lavage et soin de véhicules). En envoyant une demande depuis ce site, le client déclare avoir pris connaissance des présentes CG et les accepter.</p>
 
   <h2>2. Demandes en ligne et conclusion du contrat</h2>
   <p>Les demandes envoyées depuis le site (réservation de véhicule, demande de reprise, demande de lavage) ne constituent pas un contrat. Le contrat est conclu uniquement lorsqu'AMA Concept confirme la demande par écrit (e-mail, SMS ou message). AMA Concept est libre d'accepter ou de refuser une demande, sans avoir à motiver sa décision.</p>
@@ -77,7 +77,7 @@ function cgv(s) {
   <h3>3.2 Caution</h3>
   <p>Aucune caution n'est demandée aux clients domiciliés en Suisse (0 CHF). Pour les autres clients : ${TBD('montant et modalités')}.</p>
   <h3>3.3 Kilométrage</h3>
-  <p>150 km sont inclus par jour de location, sauf indication contraire sur la fiche du véhicule. Chaque kilomètre supplémentaire est facturé ${TBD('tarif')} CHF.</p>
+  <p>Le kilométrage inclus est indiqué pour chaque véhicule et chaque formule (par exemple 24 h ou week-end). Chaque kilomètre supplémentaire est facturé ${TBD('tarif')} CHF.</p>
   <h3>3.4 Prise en charge et restitution</h3>
   <p>Un état des lieux est établi contradictoirement à la remise et à la restitution du véhicule. Le véhicule doit être restitué à la date, à l'heure et au lieu convenus, avec le même niveau de carburant ou de charge. Tout retard ou complément de carburant est facturé selon ${TBD('barème')}.</p>
   <h3>3.5 Utilisation du véhicule</h3>
@@ -89,7 +89,7 @@ function cgv(s) {
   <h3>3.8 Contrat de location</h3>
   <p>Un contrat de location est signé à la remise du véhicule. En cas de divergence, il prévaut sur les présentes CG.</p>
 
-  <h2>4. Reprises de leasing (AMARENT)</h2>
+  <h2>4. Leasing et reprises de leasing (AMA Concept)</h2>
   <h3>4.1 Annonces</h3>
   <p>Les annonces de reprise sont établies sur la base des informations disponibles au moment de la publication (mensualité, durée restante, kilométrage autorisé, montant de reprise, frais). Elles sont indicatives et peuvent évoluer jusqu'à la conclusion du transfert.</p>
   <h3>4.2 Conditions</h3>

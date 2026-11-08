@@ -71,8 +71,9 @@ export async function resizeImage(file, max = 1024, quality = 0.76) {
   } finally { URL.revokeObjectURL(url); }
 }
 
-/** N'accepte que des images encodées localement (évite toute injection d'URL). */
-export const safeImg = (src) => (typeof src === 'string' && /^data:image\/(jpeg|png|webp);base64,[a-z0-9+/=]+$/i.test(src) ? src : '');
+/** N'accepte que des images encodées localement ou les fichiers du site (évite toute injection d'URL). */
+export const safeImg = (src) => (typeof src === 'string'
+  && (/^data:image\/(jpeg|png|webp);base64,[a-z0-9+/=]+$/i.test(src) || /^assets\/img\/[a-z0-9/_-]+\.(webp|jpe?g|png)$/i.test(src)) ? src : '');
 
 /** Silhouette de voiture utilisée quand aucune photo n'est disponible. */
 export const CAR_SVG = `<svg class="car-svg" viewBox="0 0 240 96" aria-hidden="true" focusable="false">

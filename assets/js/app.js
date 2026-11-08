@@ -38,6 +38,7 @@ const vTitle = (v) => `${v.brand || ''} ${v.model || ''}`.trim();
 const photosOf = (v) => (v.photos || []).map(safeImg).filter(Boolean);
 const hasVal = (x) => x !== null && x !== undefined && x !== '';
 const fmtMonth = (ym) => (ym ? new Date(`${ym}-01T00:00:00`).toLocaleDateString(`${L()}-CH`, { month: 'long', year: 'numeric' }) : '');
+const isFin = (v) => v.offerType === 'financing';
 const visibleLeasing = () => Store.all('leasing').filter((v) => v.status === 'available' || v.status === 'reserved');
 const visibleRentals = () => Store.all('rentals').filter((v) => v.status !== 'hidden');
 
@@ -49,7 +50,7 @@ function vimg(v, badges, kind) {
 }
 
 function leasingCard(v) {
-  const left = v.featured ? `<span class="badge solid">${esc(t('card.featured'))}</span>` : '<span></span>';
+  const left = `<span class="badge solid">${esc(t(`offer_type.${isFin(v) ? 'financing' : 'takeover'}`))}</span>`;
   const right = v.status === 'reserved'
     ? `<span class="badge warn">${esc(t('status.reserved'))}</span>`
     : (v.body ? `<span class="badge">${esc(t(`body.${v.body}`))}</span>` : '');
@@ -65,12 +66,16 @@ function leasingCard(v) {
         <div><small>${esc(t('spec.fuel'))}</small><b>${v.fuel ? esc(t(`fuel.${v.fuel}`)) : '—'}</b></div>
       </div>
       <div class="vprice">
-        <div class="price">${num(v.monthly)}<small>${esc(t('card.per_month'))}</small></div>
-        ${hasVal(v.takeover) ? `<div class="apport">${esc(t('card.takeover'))}<b>${chf(v.takeover)}</b></div>` : ''}
+        ${hasVal(v.monthly)
+          ? `<div class="price">${isFin(v) ? `<small class="pre">${esc(t('card.from'))}</small>` : ''}${num(v.monthly)}<small>${esc(t('card.per_month'))}</small></div>`
+          : `<div class="price on-request">${esc(t('card.on_request'))}</div>`}
+        ${isFin(v)
+          ? (hasVal(v.salePrice) ? `<div class="apport">${esc(t('lt.salePrice'))}<b>${chf(v.salePrice)}</b></div>` : '')
+          : (hasVal(v.takeover) ? `<div class="apport">${esc(t('card.takeover'))}<b>${chf(v.takeover)}</b></div>` : '')}
       </div>
       <div class="vactions">
         <button class="btn ghost sm" type="button" data-open="leasing" data-id="${esc(v.id)}">${esc(t('card.details'))}</button>
-        <a class="btn sm" href="#contact?motif=leasing&v=${encodeURIComponent(v.id)}">${esc(t('card.request'))}</a>
+        <a class="btn sm" href="#contact?motif=leasing&v=${encodeURIComponent(v.id)}">${esc(t(isFin(v) ? 'card.request_fin' : 'card.request'))}</a>
       </div>
     </div>
   </article>`;
@@ -187,8 +192,8 @@ function renderLeasingList() {
   let list = visibleLeasing().filter((v) => !body || v.body === body);
   const by = {
     featured: (a, b) => (b.featured - a.featured) || (a.status === 'reserved') - (b.status === 'reserved') || String(b.createdAt).localeCompare(String(a.createdAt)),
-    price_asc: (a, b) => (a.monthly || 0) - (b.monthly || 0),
-    price_desc: (a, b) => (b.monthly || 0) - (a.monthly || 0),
+    price_asc: (a, b) => (hasVal(a.monthly) ? a.monthly : Infinity) - (hasVal(b.monthly) ? b.monthly : Infinity),
+    price_desc: (a, b) => (hasVal(b.monthly) ? b.monthly : -1) - (hasVal(a.monthly) ? a.monthly : -1),
     km_asc: (a, b) => (a.km || 0) - (b.km || 0),
     year_desc: (a, b) => (b.year || 0) - (a.year || 0),
   };
@@ -227,7 +232,24 @@ function specRows(v) {
 }
 const table = (rows) => `<div class="spec-table">${rows.map(([k, val]) => `<div><small>${esc(t(k))}</small><b>${esc(val)}</b></div>`).join('')}${rows.length % 2 ? '<div aria-hidden="true"></div>' : ''}</div>`;
 
+function financingTerms(v) {
+  return [
+    ['lt.salePrice', hasVal(v.salePrice) ? chf(v.salePrice) : null],
+    ['lt.monthlyDeposit', hasVal(v.monthly) ? `${num(v.monthly)} ${t('card.per_month')}` : null],
+    ['lt.monthlyNoDeposit', hasVal(v.monthlyNoDeposit) ? `${num(v.monthlyNoDeposit)} ${t('card.per_month')}` : null],
+    ['lt.downPayment', hasVal(v.downPayment) ? chf(v.downPayment) : (hasVal(v.monthly) && hasVal(v.monthlyNoDeposit) ? t('unit.on_request') : null)],
+    ['lt.duration', hasVal(v.durationMonths) ? `${num(v.durationMonths)} ${t('unit.months')}` : null],
+    ['lt.rate', hasVal(v.rate) ? `${num(v.rate)} %` : null],
+    ['lt.kmPerYear', hasVal(v.kmPerYear) ? `${num(v.kmPerYear)} km` : null],
+    ['lt.lessor', v.lessor || null],
+    ['lt.warranty', hasVal(v.warrantyMonths) ? t('lt.warranty_v', { n: v.warrantyMonths }) : null],
+  ].filter(([, x]) => hasVal(x));
+}
+function highlights(v) {
+  return [v.swiss && 'hl.swiss', v.mfkFresh && 'hl.mfk', v.serviceFresh && 'hl.service', (v.warranty && !hasVal(v.warrantyMonths)) && 'hl.warranty'].filter(Boolean);
+}
 function leasingTerms(v) {
+  if (isFin(v)) return financingTerms(v);
   return [
     ['lt.monthly', hasVal(v.monthly) ? `${num(v.monthly)} ${t('card.per_month')}` : null],
     ['lt.takeover', hasVal(v.takeover) ? chf(v.takeover) : null],
@@ -241,10 +263,7 @@ function leasingTerms(v) {
 function rentTerms(v) {
   const ex = extraKmOf(v);
   return [
-    ['rt.day', hasVal(v.priceDay) ? chf(v.priceDay) : null],
-    ['rt.weekend', hasVal(v.priceWeekend) ? chf(v.priceWeekend) : null],
-    ['rt.week', hasVal(v.priceWeek) ? chf(v.priceWeek) : null],
-    ['rt.kmDay', `${num(kmDayOf(v))} km`],
+    ...offersOf(v).map((o) => [`rt.${o.key}`, `${chf(o.price)} · ${num(o.km)} km${o.rule ? ` · ${t(`offer.rule_${o.rule}`)}` : ''}`]),
     ['rt.extraKm', ex === null ? t('unit.on_request') : chf(ex)],
     ['rt.deposit', chf(v.deposit || 0)],
     ['rt.minAge', hasVal(v.minAge) ? `${v.minAge} ${t('unit.years')}` : null],
@@ -276,13 +295,15 @@ function openVehicle(kind, id) {
         <div class="thumbs">${photos.map((p, k) => `<button type="button" data-gi="${k}" aria-label="${esc(t('veh.photo', { i: k + 1, n: photos.length }))}"><img src="${p}" alt=""></button>`).join('')}</div>` : ''}
     </div>
     <div class="veh-info">
-      <p class="kicker">${isL ? 'AMARENT · ' + esc(t('nav.leasing')) : 'AMARENT · ' + esc(t('nav.locations'))}</p>
+      <p class="kicker">${isL ? 'AMA Concept' : 'AMARENT'} · ${esc(isL ? t(`offer_type.${isFin(v) ? 'financing' : 'takeover'}`) : t('nav.locations'))}</p>
       <h2 id="vehTitle">${esc(vTitle(v))}</h2>
       <p class="vsub">${esc(v.version || '')}</p>
       ${isL
-        ? `<div class="veh-price"><b>${num(v.monthly)}</b><span class="muted">${esc(t('card.per_month'))}</span>${v.status === 'reserved' ? `<span class="pill reserved">${esc(t('status.reserved'))}</span>` : ''}</div>`
+        ? `<div class="veh-price">${hasVal(v.monthly) ? `${isFin(v) ? `<span class="muted">${esc(t('card.from'))}</span>` : ''}<b>${num(v.monthly)}</b><span class="muted">${esc(t('card.per_month'))}</span>` : `<b class="on-request">${esc(t('card.on_request'))}</b>`}${v.status === 'reserved' ? `<span class="pill reserved">${esc(t('status.reserved'))}</span>` : ''}</div>
+           ${isFin(v) && hasVal(v.salePrice) ? `<p class="muted veh-cash">${esc(t('card.cash', { p: chf(v.salePrice) }))}</p>` : ''}
+           ${highlights(v).length ? `<ul class="checks small hl">${highlights(v).map((k) => `<li>${esc(t(k))}</li>`).join('')}</ul>` : ''}`
         : `<div class="veh-price"><span class="muted">${esc(t('rent.from'))}</span><b>${num(v.priceDay)}</b><span class="muted">${esc(t('rent.per_day'))}</span></div>`}
-      <h3>${esc(isL ? t('veh.leasing_terms') : t('veh.rent_terms'))}</h3>
+      <h3>${esc(isL ? t(isFin(v) ? 'veh.fin_terms' : 'veh.leasing_terms') : t('veh.rent_terms'))}</h3>
       ${table(isL ? leasingTerms(v) : rentTerms(v))}
       <h3>${esc(t('veh.specs'))}</h3>
       ${table(specRows(v))}
@@ -291,7 +312,7 @@ function openVehicle(kind, id) {
       ${isL ? `<p class="fine">${esc(t('legal.lcd'))}</p>` : ''}
       <div class="veh-cta">
         ${isL
-          ? `<a class="btn block" href="#contact?motif=leasing&v=${encodeURIComponent(v.id)}">${esc(t('card.request'))}</a>`
+          ? `<a class="btn block" href="#contact?motif=leasing&v=${encodeURIComponent(v.id)}">${esc(t(isFin(v) ? 'card.request_fin' : 'card.request'))}</a>`
           : (v.status === 'available' ? `<a class="btn block" href="#locations?v=${encodeURIComponent(v.id)}">${esc(t('veh.book'))}</a>` : `<button class="btn block" type="button" disabled>${esc(t('rent.unavailable'))}</button>`)}
         <a class="btn ghost block" href="${waLink(CONFIG.whatsapp, msg)}" target="_blank" rel="noopener">WhatsApp</a>
       </div>
@@ -342,11 +363,23 @@ function extraKmOf(r) {
   const v = hasVal(r.extraKm) ? r.extraKm : Store.settings().extraKm;
   return hasVal(v) ? Number(v) : null;
 }
+/**
+ * Offres d'un véhicule.
+ * days : jours facturés (durée annoncée) · span : jours bloqués au calendrier
+ * starts : jours de départ autorisés (0 = dimanche … 6 = samedi), null = tous.
+ */
 function offersOf(r) {
-  return [['day', 1, r.priceDay], ['weekend', 2, r.priceWeekend], ['week', 7, r.priceWeek]]
-    .filter(([, , p]) => Number(p) > 0)
-    .map(([key, days, price]) => ({ key, days, price: Number(price) }));
+  const kmDay = kmDayOf(r);
+  const list = [];
+  if (Number(r.priceDay) > 0) list.push({ key: 'day', days: 1, span: 1, price: Number(r.priceDay), km: kmDay, starts: r.dayWeekdaysOnly ? [1, 2, 3, 4, 5] : null, rule: r.dayWeekdaysOnly ? 'weekdays' : '' });
+  if (Number(r.priceWeekend) > 0) {
+    const fri = !!r.weekendFriday;
+    list.push({ key: 'weekend', days: 2, span: fri ? 3 : 2, price: Number(r.priceWeekend), km: hasVal(r.kmWeekend) ? Number(r.kmWeekend) : 2 * kmDay, starts: fri ? [5] : null, rule: fri ? 'friday' : '' });
+  }
+  if (Number(r.priceWeek) > 0) list.push({ key: 'week', days: 7, span: 7, price: Number(r.priceWeek), km: 7 * kmDay, starts: null, rule: '' });
+  return list;
 }
+const startAllowed = (o, d) => !o.starts || o.starts.includes(d.getDay());
 function currentRental() {
   const list = visibleRentals();
   let r = list.find((x) => x.id === state.rent.id);
@@ -371,12 +404,13 @@ function daySets(r) {
     .forEach((x) => eachDay(x.start, x.end, (d) => (x.status === 'confirmed' ? booked : pend).add(d)));
   return { booked, pend };
 }
-function rangeStatus(r, start, days) {
+function rangeStatus(r, start, o) {
   const { booked, pend } = daySets(r);
-  const list = Array.from({ length: days }, (_, i) => iso(addDays(start, i)));
+  const list = Array.from({ length: o.span }, (_, i) => iso(addDays(start, i)));
   const past = start < today();
+  const rule = !startAllowed(o, start);
   const clash = list.some((d) => booked.has(d) || pend.has(d));
-  return { ok: !past && !clash, past, clash, list };
+  return { ok: !past && !clash && !rule, past, clash, rule, list };
 }
 
 function renderRentGrid() {
@@ -394,7 +428,7 @@ function renderRentGrid() {
           ${r.gearbox ? `<span class="chip">${esc(t(`gearbox.${r.gearbox}`))}</span>` : ''}
           ${r.seats ? `<span class="chip">${esc(r.seats)} ${esc(t('spec.seats').toLowerCase())}</span>` : ''}
           ${r.fuel ? `<span class="chip">${esc(t(`fuel.${r.fuel}`))}</span>` : ''}
-          <span class="chip">${esc(t('rent.km_day', { n: num(kmDayOf(r)) }))}</span>
+          ${offersOf(r).map((o) => `<span class="chip">${esc(t(`offer.${o.key}`))} · ${esc(t('offer.km', { n: num(o.km) }))}</span>`).join('')}
         </div>
         <div class="from"><small>${esc(t('rent.from'))}</small> ${num(r.priceDay)} <small>${esc(t('rent.per_day'))}</small></div>
         <div class="vactions mt">
@@ -412,7 +446,8 @@ function renderOffers() {
   const o = currentOffer(r);
   box.innerHTML = offersOf(r).map((x) => `<button class="offer" type="button" role="radio" aria-checked="${o && x.key === o.key}" data-offer="${x.key}">
       <b>${esc(t(`offer.${x.key}`))}</b>
-      <small>${esc(tp('offer.days', x.days))} · ${esc(t('offer.km', { n: num(x.days * kmDayOf(r)) }))}</small>
+      <small>${esc(x.key === 'week' ? tp('offer.days', x.days) : t('offer.hours', { n: x.days * 24 }))} · ${esc(t('offer.km', { n: num(x.km) }))}</small>
+      ${x.rule ? `<small class="rule">${esc(t(`offer.rule_${x.rule}`))}</small>` : ''}
       <span class="op">${chf(x.price)}</span>
     </button>`).join('');
 }
@@ -427,7 +462,7 @@ function renderCal() {
   $('#monthLabel').textContent = state.rent.cal.toLocaleDateString(`${L()}-CH`, { month: 'long', year: 'numeric' });
   const { booked, pend } = daySets(r);
   const first = (new Date(y, m, 1).getDay() + 6) % 7; const count = new Date(y, m + 1, 0).getDate();
-  const sel = state.rent.start && o ? rangeStatus(r, state.rent.start, o.days) : null;
+  const sel = state.rent.start && o ? rangeStatus(r, state.rent.start, o) : null;
   let html = t('cal.wd').split(',').map((d) => `<div class="wd" aria-hidden="true">${esc(d)}</div>`).join('');
   for (let i = 0; i < first; i++) html += '<div></div>';
   for (let d = 1; d <= count; d++) {
@@ -436,6 +471,7 @@ function renderCal() {
     if (date < t0) { cls += ' past'; dis = true; state2 = ''; }
     else if (booked.has(s)) { cls += ' booked'; dis = true; state2 = t('cal.booked'); }
     else if (pend.has(s)) { cls += ' pend'; dis = true; state2 = t('cal.pending'); }
+    else if (o && !startAllowed(o, date)) { cls += ' norule'; dis = true; state2 = t(`offer.rule_${o.rule}`); }
     if (s === iso(t0)) cls += ' today';
     if (sel && sel.list.includes(s)) cls += sel.ok ? ' inrange' : ' inrange bad';
     if (state.rent.start && s === iso(state.rent.start)) cls += ' sel';
@@ -459,18 +495,18 @@ function renderSummary() {
   const o = currentOffer(r);
   const head = `<h3>${esc(t('sum.title'))}</h3><p>${esc(vTitle(r))} · ${esc(o ? t(`offer.${o.key}`) : '')}</p>`;
   if (!state.rent.start || !o) { el.innerHTML = `${head}<p>${esc(t('sum.pick'))}</p>`; return; }
-  const st = rangeStatus(r, state.rent.start, o.days);
-  const end = addDays(state.rent.start, o.days - 1);
-  const dateTxt = o.days === 1
+  const st = rangeStatus(r, state.rent.start, o);
+  const end = addDays(state.rent.start, o.span - 1);
+  const dateTxt = o.span === 1
     ? fmtDate(state.rent.start, L(), { weekday: 'long', day: 'numeric', month: 'long' })
     : t('sum.range', { a: fmtDate(state.rent.start, L()), b: fmtDate(end, L()) });
   const ex = extraKmOf(r);
   el.innerHTML = `${head}
-    <p><strong>${esc(dateTxt)}</strong> · ${esc(tp('offer.days', o.days))}</p>
-    <p>${esc(t('sum.km', { n: num(o.days * kmDayOf(r)), d: num(kmDayOf(r)) }))}</p>
+    <p><strong>${esc(dateTxt)}</strong> · ${esc(o.key === 'week' ? tp('offer.days', o.days) : t('offer.hours', { n: o.days * 24 }))}</p>
+    <p>${esc(t('sum.km_offer', { n: num(o.km) }))}</p>
     <p>${esc(ex === null ? t('sum.extra_tbd') : t('sum.extra', { p: num(ex) }))}</p>
     ${st.ok ? `<div class="total">${chf(o.price)}</div><p>${esc(t('sum.pending'))}</p>`
-      : `<p class="warn">${esc(st.past ? t('sum.past') : t('sum.unavailable'))}</p>`}`;
+      : `<p class="warn">${esc(st.past ? t('sum.past') : st.rule ? t(`offer.rule_${o.rule}`) : t('sum.unavailable'))}</p>`}`;
 }
 
 function renderLocations() { renderRentGrid(); renderOffers(); renderCal(); renderSummary(); }
@@ -490,7 +526,10 @@ function setupLocations() {
   });
   $('#offers').addEventListener('click', (e) => {
     const b = e.target.closest('[data-offer]'); if (!b) return;
-    state.rent.offer = b.dataset.offer; renderOffers(); renderCal(); renderSummary();
+    state.rent.offer = b.dataset.offer;
+    const r = currentRental(); const o = r && currentOffer(r);
+    if (state.rent.start && o && !startAllowed(o, state.rent.start)) state.rent.start = null;
+    renderOffers(); renderCal(); renderSummary();
   });
   $('#days').addEventListener('click', (e) => {
     const b = e.target.closest('[data-day]'); if (!b || b.disabled) return;
@@ -506,13 +545,13 @@ function setupLocations() {
     const r = currentRental(); const o = r && currentOffer(r);
     const say = (txt, cls) => { out.className = `msg ${cls}`; out.textContent = txt; };
     if (!r || !o || !state.rent.start) { say(t('msg.pick_date'), 'err'); $('#days').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
-    const st = rangeStatus(r, state.rent.start, o.days);
+    const st = rangeStatus(r, state.rent.start, o);
     if (!st.ok) { say(t('msg.unavailable'), 'err'); renderCal(); return; }
     if (!validate(form)) { say(t('msg.required'), 'err'); return; }
-    const end = addDays(state.rent.start, o.days - 1);
+    const end = addDays(state.rent.start, o.span - 1);
     const res = Store.upsert('reservations', {
       vehicleId: r.id, vehicleLabel: `${vTitle(r)} ${r.version || ''}`.trim(), offer: o.key, days: o.days,
-      start: iso(state.rent.start), end: iso(end), total: o.price, kmIncluded: o.days * kmDayOf(r),
+      start: iso(state.rent.start), end: iso(end), total: o.price, kmIncluded: o.km,
       client: { name: $('#rName').value.trim(), tel: $('#rTel').value.trim(), email: $('#rMail').value.trim() },
       note: $('#rNote').value.trim(), lang: L(), status: 'pending',
     });
@@ -575,7 +614,8 @@ function renderWash() {
   const sel = washServices().filter((s) => state.wash.sel.includes(s.id));
   $('#basketTxt').textContent = !cat ? t('wash.pick_cat') : (sel.length ? sel.map((s) => t(`svc.${s.id}`)).join(' + ') : t('wash.none'));
   $('#basketTotal').textContent = chf(cat ? sel.reduce((a, s) => a + Number(s.prices[cat] || 0), 0) : 0);
-  $('#wPlace').value = t('wash.place_v');
+  const addr = Store.settings().address;
+  $('#wPlace').value = addr ? `${t('wash.place_v')} · ${addr}` : t('wash.place_v');
   $('#wDate').min = iso(today());
 }
 
@@ -629,6 +669,8 @@ function setupWash() {
 /* =========================================================
    Contact
    ========================================================= */
+const hoursHTML = (s) => (s.open247 ? `<span>${esc(t('hours.always'))}</span>` : (s.hours ? `<span style="white-space:pre-line">${esc(s.hours)}</span>` : ''));
+const igLinks = () => CONFIG.instagram.map((x) => `<a href="https://www.instagram.com/${encodeURIComponent(x.handle)}/" target="_blank" rel="noopener">@${esc(x.handle)} <small class="muted">· ${esc(t(`ig.${x.activity}`))}</small></a>`).join('');
 function renderContact() {
   const m = $('#cMotif'); const keepM = m.value;
   m.innerHTML = `<option value="">${esc(t('contact.motif_ph'))}</option>${MOTIFS.map((k) => `<option value="${k}">${esc(t(`motif.${k}`))}</option>`).join('')}`;
@@ -644,12 +686,14 @@ function renderContact() {
     <div class="ci"><div class="ico" aria-hidden="true">☎</div><div><b>${esc(t('contact.phone'))}</b><a href="tel:${CONFIG.phoneIntl}">${CONFIG.phoneDisplay}</a><span>${esc(t('contact.phone_sub'))}</span></div></div>
     <div class="ci"><div class="ico" aria-hidden="true">@</div><div><b>${esc(t('contact.email'))}</b>${s.email ? `<a href="mailto:${esc(s.email)}">${esc(s.email)}</a>` : tbd}</div></div>
     <div class="ci"><div class="ico" aria-hidden="true">⌂</div><div><b>${esc(t('contact.address'))}</b>${s.address ? `<span>${esc(s.address)}</span>` : `<span>Genève · ${esc(t('contact.tbd'))}</span>`}</div></div>
-    <div class="ci"><div class="ico" aria-hidden="true">◷</div><div><b>${esc(t('contact.hours'))}</b>${s.hours ? `<span style="white-space:pre-line">${esc(s.hours)}</span>` : tbd}</div></div>
-    <div class="ci"><div class="ico" aria-hidden="true">S</div><div><b>${esc(t('contact.snap'))}</b><span>${CONFIG.snapchat.map(esc).join(' · ')}</span></div></div>`;
+    <div class="ci"><div class="ico" aria-hidden="true">◷</div><div><b>${esc(t('contact.hours'))}</b>${hoursHTML(s) || tbd}</div></div>
+    <div class="ci"><div class="ico" aria-hidden="true">IG</div><div><b>Instagram</b>${igLinks()}</div></div>`;
   $('#footerContact').innerHTML = `<a href="tel:${CONFIG.phoneIntl}">${CONFIG.phoneDisplay}</a>
     <a href="${waLink(CONFIG.whatsapp, t('wa.greeting'))}" target="_blank" rel="noopener">WhatsApp</a>
     ${s.email ? `<a href="mailto:${esc(s.email)}">${esc(s.email)}</a>` : ''}
-    <p>${s.address ? esc(s.address) : 'Genève, Suisse'}</p>`;
+    ${CONFIG.instagram.map((x) => `<a href="https://www.instagram.com/${encodeURIComponent(x.handle)}/" target="_blank" rel="noopener">Instagram @${esc(x.handle)}</a>`).join('')}
+    <p>${s.address ? esc(s.address) : 'Genève, Suisse'}</p>
+    ${hoursHTML(s) ? `<p>${hoursHTML(s)}</p>` : ''}`;
 }
 function setupContact() {
   $('#contactForm').addEventListener('submit', (e) => {

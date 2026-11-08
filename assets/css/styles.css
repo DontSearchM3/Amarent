@@ -169,6 +169,7 @@ h2{font-size:clamp(26px,3.4vw,38px);margin-bottom:10px}
 .vprice{display:flex;justify-content:space-between;align-items:flex-end;margin:auto 0 16px;gap:10px}
 .price{font-size:32px;font-weight:900;line-height:1}
 .price small{font-size:13px;color:var(--mute);font-weight:600;margin-left:6px}
+.price small.pre{margin:0 6px 0 0}
 .apport{font-size:12px;color:var(--mute);text-align:right}
 .apport b{display:block;color:var(--ice);font-size:14px}
 .vactions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -368,7 +369,7 @@ body:has(dialog[open]){overflow:hidden}
 @media (max-width:860px){.veh{grid-template-columns:1fr}}
 .gallery{position:relative;background:#060912;min-height:300px;display:flex;flex-direction:column;justify-content:center}
 .gallery .main{position:relative;aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.gallery .main img{width:100%;height:100%;object-fit:cover}
+.gallery .main img{width:100%;height:100%;object-fit:contain;background:#060912}
 .gallery .main .car-svg{width:60%}
 .gallery .nav-btn{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:rgba(5,7,12,.7);color:#fff;cursor:pointer;font-size:18px}
 .gallery .nav-btn.prev{left:12px}.gallery .nav-btn.next{right:12px}
@@ -518,3 +519,18 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:760px}
 
 /* ---------- Utilitaires (en dernier pour primer) ---------- */
 .mt{margin-top:16px!important}.mt-xl{margin-top:56px!important}.mb{margin-bottom:16px!important}
+
+/* ---------- Logos officiels ---------- */
+.logo img{height:58px;width:auto;display:block}
+.site-footer .logo img{height:56px}
+@media (max-width:420px){.logo img{height:46px}}
+.brand-logo{height:64px;margin-bottom:14px;display:flex;align-items:center}
+.brand-logo img{height:64px;width:auto}
+.page-logo{margin-bottom:14px}
+.page-logo img{height:56px;width:auto;display:block}
+.veh-cash{margin:-10px 0 12px}
+.checks.hl{margin:0 0 6px}
+.day.norule{background:transparent;border-color:#16203a;color:#3a4766;cursor:not-allowed}
+.offer small.rule{color:var(--blue-hi);font-weight:700;margin-top:4px}
+.price.on-request,.veh-price .on-request{font-size:22px;font-weight:800;color:var(--blue-hi)}
+.ci a small{font-weight:500}

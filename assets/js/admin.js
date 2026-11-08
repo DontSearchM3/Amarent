@@ -45,7 +45,7 @@ function warnIfNotSaved(ok) {
    Libellés
    ========================================================= */
 const STATUS_LABEL = {
-  leasing: { available: 'Disponible', reserved: 'En cours de reprise', taken: 'Repris (masqué)', hidden: 'Masqué (brouillon)' },
+  leasing: { available: 'Disponible', reserved: 'Réservé / en cours', taken: 'Vendu / repris (masqué)', hidden: 'Masqué (brouillon)' },
   rentals: { available: 'Disponible', maintenance: 'Indisponible (visible)', hidden: 'Masqué' },
   req: { pending: 'En attente', confirmed: 'Confirmée', refused: 'Refusée', cancelled: 'Annulée', done: 'Terminée' },
   reviews: { pending: 'À modérer', published: 'Publié', rejected: 'Refusé' },
@@ -116,7 +116,7 @@ function renderGate() {
 }
 
 const TABS = [
-  ['dashboard', 'Tableau de bord'], ['leasing', 'Reprises de leasing'], ['rentals', 'Véhicules de location'],
+  ['dashboard', 'Tableau de bord'], ['leasing', 'Véhicules en leasing'], ['rentals', 'Véhicules de location'],
   ['reservations', 'Réservations'], ['wash', 'Demandes de lavage'], ['washcfg', 'Wash : tarifs et modèles'],
   ['reviews', 'Avis clients'], ['messages', 'Messages'], ['settings', 'Paramètres'],
 ];
@@ -184,7 +184,7 @@ function tabDashboard(main) {
       ${kpi('wash', c.wash, 'Lavages à valider', true, 'pending')}
       ${kpi('reviews', c.reviews, 'Avis à modérer', true, 'pending')}
       ${kpi('messages', c.messages, 'Nouveaux messages', true, 'new')}
-      ${kpi('leasing', L.filter((v) => v.status === 'available').length, 'Leasings disponibles')}
+      ${kpi('leasing', L.filter((v) => v.status === 'available').length, 'Véhicules en leasing')}
       ${kpi('rentals', R.filter((v) => v.status === 'available').length, 'Véhicules à louer')}
       ${kpi('reviews', avg, `Note moyenne (${pub.length} avis)`, false, 'published')}
     </div>
@@ -197,7 +197,7 @@ function tabDashboard(main) {
       <div class="panel">
         <h2 class="h3 mb">Raccourcis</h2>
         <div class="card-list">
-          <button class="btn ghost" type="button" data-new="leasing">+ Ajouter un leasing à reprendre</button>
+          <button class="btn ghost" type="button" data-new="leasing">+ Ajouter un véhicule en leasing</button>
           <button class="btn ghost" type="button" data-new="rentals">+ Ajouter un véhicule de location</button>
           <button class="btn ghost" type="button" data-go="washcfg">Modifier les tarifs AMAWASH</button>
           <button class="btn ghost" type="button" data-go="settings">Lien pour demander un avis</button>
@@ -216,15 +216,15 @@ function tabDashboard(main) {
 function tabVehicles(col) {
   const isL = col === 'leasing'; const f = adm.f[col];
   const main = $('#admMain');
-  main.innerHTML = `${head(isL ? 'Reprises de leasing' : 'Véhicules de location',
-    isL ? 'Annonces publiées sur la page Reprises. « Repris » retire l\'annonce du site.' : 'Flotte AMARENT proposée à la réservation.',
+  main.innerHTML = `${head(isL ? 'Véhicules en leasing' : 'Véhicules de location',
+    isL ? 'Véhicules en leasing et reprises publiés sur la page Leasing. Le statut « Repris » retire l\'annonce du site.' : 'Flotte AMARENT proposée à la réservation.',
     `<button class="btn ghost sm" type="button" id="vExport">Exporter (CSV)</button><button class="btn sm" type="button" id="vAdd">+ Ajouter un véhicule</button>`)}
     <div class="toolbar">
       <input class="grow" type="search" id="vQ" placeholder="Rechercher marque, modèle, plaques…" value="${esc(f.q)}" aria-label="Rechercher">
       <select id="vS" aria-label="Filtrer par statut"><option value="">Tous les statuts</option>${Object.entries(STATUS_LABEL[col]).map(([k, l]) => `<option value="${k}" ${f.status === k ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select>
     </div>
     <div class="table-wrap"><table class="tbl"><thead><tr>
-      <th></th><th>Véhicule</th>${isL ? '<th>Mensualité</th><th>Reprise</th><th>Restant</th><th>À la une</th>' : '<th>Jour / WE / Semaine</th><th>Km / jour</th><th>Indispo. à venir</th>'}<th>Statut</th><th style="text-align:right">Actions</th>
+      <th></th><th>Véhicule</th>${isL ? '<th>Type</th><th>Mensualité</th><th>Prix / reprise</th><th>À la une</th>' : '<th>24 h / WE / Semaine</th><th>Km inclus</th><th>Indispo. à venir</th>'}<th>Statut</th><th style="text-align:right">Actions</th>
     </tr></thead><tbody id="vBody"></tbody></table></div>`;
   const list = () => {
     const q = norm(f.q);
@@ -240,10 +240,11 @@ function tabVehicles(col) {
         <td><div class="thumb-sm">${p ? `<img src="${p}" alt="">` : CAR_SVG}</div></td>
         <td><b>${esc(vTitle(v))}</b><br><small>${esc(v.version || '')}${v.year ? ` · ${v.year}` : ''}${hasVal(v.km) ? ` · ${num(v.km)} km` : ''} · ${(v.photos || []).length} photo(s)</small></td>
         ${isL
-          ? `<td><b>${chf(v.monthly)}</b></td><td>${hasVal(v.takeover) ? chf(v.takeover) : '—'}</td><td>${hasVal(v.monthsLeft) ? `${v.monthsLeft} mois` : '—'}</td>
+          ? `<td>${v.offerType === 'financing' ? 'Leasing' : 'Reprise'}</td><td><b>${hasVal(v.monthly) ? chf(v.monthly) : 'Sur demande'}</b>${hasVal(v.monthlyNoDeposit) ? `<br><small>${chf(v.monthlyNoDeposit)} sans acompte</small>` : ''}</td>
+             <td>${v.offerType === 'financing' ? (hasVal(v.salePrice) ? chf(v.salePrice) : '—') : (hasVal(v.takeover) ? chf(v.takeover) : '—')}</td>
              <td><label class="switch" aria-label="À la une"><input type="checkbox" data-feat="${esc(v.id)}" ${v.featured ? 'checked' : ''}></label></td>`
           : `<td>${chf(v.priceDay)}<br><small>${hasVal(v.priceWeekend) ? chf(v.priceWeekend) : '—'} · ${hasVal(v.priceWeek) ? chf(v.priceWeek) : '—'}</small></td>
-             <td>${num(v.kmPerDay || Store.settings().kmPerDay)} km</td><td>${blockedSoon}</td>`}
+             <td>${num(v.kmPerDay || Store.settings().kmPerDay)} km${hasVal(v.kmWeekend) ? `<br><small>WE : ${num(v.kmWeekend)} km</small>` : ''}</td><td>${blockedSoon}</td>`}
         <td><select data-status="${esc(v.id)}" aria-label="Statut">${Object.entries(STATUS_LABEL[col]).map(([k, l]) => `<option value="${k}" ${v.status === k ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></td>
         <td><div class="actions">
           <button class="btn xs" type="button" data-edit="${esc(v.id)}">Modifier</button>
@@ -258,7 +259,7 @@ function tabVehicles(col) {
   $('#vAdd').addEventListener('click', () => openEditor(col));
   $('#vExport').addEventListener('click', () => {
     const rows = Store.all(col);
-    const keys = ['brand', 'model', 'version', 'year', 'km', 'body', 'fuel', 'gearbox', 'powerHp', 'seats', ...(isL ? ['monthly', 'takeover', 'monthsLeft', 'endDate'] : ['priceDay', 'priceWeekend', 'priceWeek', 'kmPerDay']), 'status'];
+    const keys = ['brand', 'model', 'version', 'year', 'km', 'body', 'fuel', 'gearbox', 'powerHp', 'seats', ...(isL ? ['offerType', 'salePrice', 'monthly', 'monthlyNoDeposit', 'downPayment', 'takeover', 'monthsLeft', 'endDate'] : ['priceDay', 'priceWeekend', 'priceWeek', 'kmPerDay']), 'status'];
     download(`ama-${col}-${iso(today())}.csv`, toCSV([keys, ...rows.map((v) => keys.map((k) => v[k]))]), 'text/csv');
   });
   $('#vBody').onchange = (e) => {
@@ -310,18 +311,32 @@ const F = {
   consumption: { label: 'Consommation', ph: 'Ex. 6.2 l/100 km' },
   co2: { label: 'CO₂ (g/km)', type: 'number', min: 0 },
   energyLabel: { label: 'Étiquette énergie', type: 'select', opts: () => ENERGY_LABELS.map((x) => [x, x]) },
-  monthly: { label: 'Mensualité (CHF)', type: 'number', req: true, min: 0 },
-  takeover: { label: 'Montant de reprise (CHF)', type: 'number', min: 0 },
-  monthsLeft: { label: 'Mois restants', type: 'number', min: 0 },
-  endDate: { label: 'Fin du contrat', type: 'month' },
+  offerType: { label: "Type d'offre", type: 'select', req: true, opts: () => [['financing', 'Leasing / financement (véhicule à vendre)'], ['takeover', "Reprise d'un leasing existant"]], span: 3 },
+  salePrice: { label: 'Prix comptant (CHF)', type: 'number', min: 0, only: 'financing' },
+  monthly: { label: 'Mensualité (CHF)', type: 'number', min: 0, help: 'En leasing : la mensualité la plus basse, affichée « dès ». Vide = « Prix sur demande ».' },
+  monthlyNoDeposit: { label: 'Mensualité sans acompte (CHF)', type: 'number', min: 0, only: 'financing' },
+  downPayment: { label: 'Montant de l\'acompte (CHF)', type: 'number', min: 0, only: 'financing' },
+  durationMonths: { label: 'Durée du leasing (mois)', type: 'number', min: 0, only: 'financing' },
+  rate: { label: 'Taux annuel effectif (%)', type: 'number', min: 0, step: '0.01', only: 'financing', help: 'Obligatoire dans une publicité de leasing.' },
+  warrantyMonths: { label: 'Garantie possible (mois)', type: 'number', min: 0, only: 'financing' },
+  swiss: { label: 'Véhicule suisse', type: 'switch' },
+  warranty: { label: 'Garantie incluse', type: 'switch', help: 'Ou indiquez la durée dans « Garantie possible (mois) ».' },
+  mfkFresh: { label: 'Expertise (MFK) récente', type: 'switch' },
+  serviceFresh: { label: 'Service récent', type: 'switch' },
+  takeover: { label: 'Montant de reprise (CHF)', type: 'number', min: 0 , only: 'takeover' },
+  monthsLeft: { label: 'Mois restants', type: 'number', min: 0 , only: 'takeover' },
+  endDate: { label: 'Fin du contrat', type: 'month' , only: 'takeover' },
   kmPerYear: { label: 'Km / an autorisés', type: 'number', min: 0 },
-  transferFee: { label: 'Frais de transfert (CHF)', type: 'number', min: 0 },
-  residual: { label: 'Valeur résiduelle (CHF)', type: 'number', min: 0 },
-  lessor: { label: 'Société de leasing', internal: true },
-  priceDay: { label: 'Prix journée (CHF)', type: 'number', req: true, min: 0 },
-  priceWeekend: { label: 'Prix week-end, 2 jours (CHF)', type: 'number', min: 0, help: 'Vide = offre non proposée.' },
+  transferFee: { label: 'Frais de transfert (CHF)', type: 'number', min: 0 , only: 'takeover' },
+  residual: { label: 'Valeur résiduelle (CHF)', type: 'number', min: 0 , only: 'takeover' },
+  lessor: { label: 'Société de leasing' },
+  priceDay: { label: 'Prix 24 h (CHF)', type: 'number', req: true, min: 0 },
+  dayWeekdaysOnly: { label: 'Formule 24 h uniquement en semaine (lundi à vendredi)', type: 'switch' },
+  weekendFriday: { label: 'Week-end du vendredi au dimanche (48 h)', type: 'switch' },
+  kmWeekend: { label: 'Km inclus pour le week-end', type: 'number', min: 0, help: 'Vide = 2 × km par jour.' },
+  priceWeekend: { label: 'Prix week-end, 48 h (CHF)', type: 'number', min: 0, help: 'Vide = formule non proposée.' },
   priceWeek: { label: 'Prix semaine, 7 jours (CHF)', type: 'number', min: 0, help: 'Vide = offre non proposée.' },
-  kmPerDay: { label: 'Km inclus par jour', type: 'number', min: 0, ph: '150' },
+  kmPerDay: { label: 'Km inclus par 24 h', type: 'number', min: 0, ph: '150' },
   extraKm: { label: 'Km supplémentaire (CHF)', type: 'number', min: 0, step: '0.05', help: 'Vide = valeur des paramètres.' },
   deposit: { label: 'Caution (CHF)', type: 'number', min: 0 },
   minAge: { label: 'Âge minimum', type: 'number', min: 18, max: 99 },
@@ -337,7 +352,7 @@ const SECTIONS = {
     { id: 'tech', title: 'Technique', fields: ['body', 'fuel', 'gearbox', 'drive', 'powerHp', 'engineCc', 'seats', 'doors', 'luggage', 'consumption', 'co2', 'energyLabel'] },
     { id: 'eq', title: 'Équipements', custom: 'equipment' },
     { id: 'photos', title: 'Photos', custom: 'photos' },
-    { id: 'terms', title: 'Conditions de reprise', fields: ['monthly', 'takeover', 'monthsLeft', 'endDate', 'kmPerYear', 'transferFee', 'residual', 'lessor'] },
+    { id: 'terms', title: 'Prix et conditions', fields: ['offerType', 'salePrice', 'monthly', 'monthlyNoDeposit', 'downPayment', 'durationMonths', 'rate', 'takeover', 'monthsLeft', 'endDate', 'kmPerYear', 'transferFee', 'residual', 'lessor', 'warrantyMonths', 'warranty', 'swiss', 'mfkFresh', 'serviceFresh'] },
     { id: 'pub', title: 'Publication', fields: ['status', 'featured', 'description', 'internalNote'] },
   ],
   rentals: [
@@ -345,13 +360,13 @@ const SECTIONS = {
     { id: 'tech', title: 'Technique', fields: ['body', 'fuel', 'gearbox', 'drive', 'powerHp', 'engineCc', 'seats', 'doors', 'luggage', 'consumption', 'co2', 'energyLabel'] },
     { id: 'eq', title: 'Équipements', custom: 'equipment' },
     { id: 'photos', title: 'Photos', custom: 'photos' },
-    { id: 'terms', title: 'Tarifs et conditions', fields: ['priceDay', 'priceWeekend', 'priceWeek', 'kmPerDay', 'extraKm', 'deposit', 'minAge', 'licenseYears'] },
+    { id: 'terms', title: 'Tarifs et conditions', fields: ['priceDay', 'kmPerDay', 'dayWeekdaysOnly', 'priceWeekend', 'kmWeekend', 'weekendFriday', 'priceWeek', 'extraKm', 'deposit', 'minAge', 'licenseYears'] },
     { id: 'avail', title: 'Indisponibilités', custom: 'blocked' },
     { id: 'pub', title: 'Publication', fields: ['status', 'description', 'internalNote'] },
   ],
 };
 const BLANK = {
-  leasing: { status: 'hidden', featured: false, equipment: [], photos: [], body: 'berline', fuel: 'essence', gearbox: 'auto' },
+  leasing: { offerType: 'financing', swiss: true, status: 'hidden', featured: false, equipment: [], photos: [], body: 'berline', fuel: 'essence', gearbox: 'auto' },
   rentals: { status: 'hidden', equipment: [], photos: [], blocked: [], body: 'citadine', fuel: 'essence', gearbox: 'auto', kmPerDay: 150, deposit: 0, minAge: 18, licenseYears: 1 },
 };
 
@@ -377,7 +392,8 @@ function ensureEditor() {
 function fieldHTML(k, val, col) {
   const f = F[k]; const id = `ed_${k}`;
   const span = f.span === 3 ? 'span3' : f.span === 2 ? 'span2' : '';
-  if (f.type === 'switch') return `<div class="field ${span}"><label class="switch"><input type="checkbox" id="${id}" data-k="${k}" ${val ? 'checked' : ''}> ${esc(f.label)}</label></div>`;
+  const only = f.only ? ` data-only="${f.only}"` : '';
+  if (f.type === 'switch') return `<div class="field ${span}"${only}><label class="switch"><input type="checkbox" id="${id}" data-k="${k}" ${val ? 'checked' : ''}> ${esc(f.label)}</label></div>`;
   let input;
   if (f.type === 'select') {
     const opts = k === 'status' ? Object.entries(STATUS_LABEL[col]) : f.opts();
@@ -388,7 +404,7 @@ function fieldHTML(k, val, col) {
     const ty = f.type || 'text';
     input = `<input id="${id}" data-k="${k}" type="${ty}" value="${esc(val ?? '')}" ${f.req ? 'required' : ''} ${hasVal(f.min) ? `min="${f.min}"` : ''} ${hasVal(f.max) ? `max="${f.max}"` : ''} ${ty === 'number' ? `step="${f.step || 'any'}" inputmode="decimal"` : ''} placeholder="${esc(f.ph || '')}">`;
   }
-  return `<div class="field ${span}"><label for="${id}">${esc(f.label)}${f.req ? ' <span class="req-star" aria-hidden="true">*</span>' : ''}${f.internal ? ' <small class="muted">· interne</small>' : ''}</label>${input}${f.help ? `<small class="hint">${esc(f.help)}</small>` : ''}</div>`;
+  return `<div class="field ${span}"${only}><label for="${id}">${esc(f.label)}${f.req ? ' <span class="req-star" aria-hidden="true">*</span>' : ''}${f.internal ? ' <small class="muted">· interne</small>' : ''}</label>${input}${f.help ? `<small class="hint">${esc(f.help)}</small>` : ''}</div>`;
 }
 
 function openEditor(col, id) {
@@ -401,7 +417,7 @@ function openEditor(col, id) {
   const secs = SECTIONS[col];
   d.innerHTML = `<form class="editor" id="edForm" novalidate>
     <button class="dialog-x" type="button" data-ed-close aria-label="Fermer">&times;</button>
-    <div class="editor-head"><div><p class="kicker" style="margin:0 0 4px">${col === 'leasing' ? 'Reprise de leasing' : 'Véhicule de location'}</p><h2 id="edTitle">${src ? esc(vTitle(src)) : 'Nouveau véhicule'}</h2></div></div>
+    <div class="editor-head"><div><p class="kicker" style="margin:0 0 4px">${col === 'leasing' ? 'Véhicule en leasing' : 'Véhicule de location'}</p><h2 id="edTitle">${src ? esc(vTitle(src)) : 'Nouveau véhicule'}</h2></div></div>
     <div class="editor-tabs" role="tablist">${secs.map((s) => `<button type="button" role="tab" id="tab_${s.id}" aria-controls="sec_${s.id}" aria-selected="${s.id === ed.tab}" data-sec="${s.id}">${esc(s.title)}</button>`).join('')}</div>
     <div class="editor-body">${secs.map((s) => `<section role="tabpanel" id="sec_${s.id}" aria-labelledby="tab_${s.id}" ${s.id === ed.tab ? '' : 'hidden'}>${sectionHTML(s, col)}</section>`).join('')}</div>
     <div class="editor-foot">
@@ -411,6 +427,7 @@ function openEditor(col, id) {
   </form>`;
   renderPhotos(); renderBlocked();
   bindEditor(d);
+  applyOfferType();
   d.showModal();
   $('#ed_brand', d)?.focus();
 }
@@ -495,6 +512,7 @@ function bindEditor(d) {
   };
   d.onchange = (e) => {
     if (e.target.id === 'edFile') { addFiles(e.target.files); e.target.value = ''; }
+    if (e.target.id === 'ed_offerType') applyOfferType();
     const b = e.target.closest('[data-b]');
     if (b) {
       const row = ed.item.blocked[Number(b.dataset.i)]; row[b.dataset.b] = b.value;
@@ -511,6 +529,11 @@ function bindEditor(d) {
   $('#edForm', d).addEventListener('submit', (e) => { e.preventDefault(); saveEditor(); });
 }
 
+/** Affiche uniquement les champs utiles au type d'offre choisi. Les champs masqués sont vidés à l'enregistrement. */
+function applyOfferType() {
+  const sel = $('#ed_offerType'); if (!sel) return;
+  $$('#admEditor [data-only]').forEach((w) => { w.hidden = w.dataset.only !== sel.value; });
+}
 function switchSection(id) {
   ed.tab = id;
   $$('#admEditor [data-sec]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.sec === id)));
@@ -522,6 +545,7 @@ function collectEditor() {
   const d = $('#admEditor'); const out = {};
   $$('[data-k]', d).forEach((el) => {
     const k = el.dataset.k; const f = F[k];
+    if (el.closest('[data-only][hidden]')) { out[k] = f.type === 'number' ? null : (f.type === 'switch' ? false : ''); return; }
     if (f.type === 'switch') out[k] = el.checked;
     else if (f.type === 'number') out[k] = el.value === '' ? null : Number(el.value);
     else out[k] = el.value.trim();
@@ -535,6 +559,7 @@ function validateEditor() {
   const d = $('#admEditor'); let first = null;
   $$('[role="tabpanel"]', d).forEach((p) => { $(`[data-sec="${p.id.slice(4)}"]`, d)?.classList.remove('err'); });
   $$('[data-k]', d).forEach((el) => {
+    if (el.closest('[data-only][hidden]')) { el.setAttribute('aria-invalid', 'false'); return; }
     const bad = !el.checkValidity() || (el.required && !el.value.trim());
     el.setAttribute('aria-invalid', String(bad));
     if (bad) {
@@ -847,7 +872,8 @@ function tabSettings(main) {
       <div class="settings-grid">
         <div class="field"><label for="sEmail">E-mail de contact</label><input id="sEmail" type="email" value="${esc(s.email)}" placeholder="contact@amaconcept.com"></div>
         <div class="field"><label for="sAddr">Adresse</label><input id="sAddr" value="${esc(s.address)}" placeholder="Rue, numéro, NPA Genève"></div>
-        <div class="field"><label for="sHours">Horaires</label><textarea id="sHours" rows="3" placeholder="Lun–Ven 9h–18h&#10;Sam 9h–13h">${esc(s.hours)}</textarea></div>
+        <div class="field"><label for="sHours">Horaires</label><textarea id="sHours" rows="3" placeholder="Lun–Ven 9h–18h&#10;Sam 9h–13h">${esc(s.hours)}</textarea>
+          <label class="switch" style="margin-top:10px"><input type="checkbox" id="sOpen" ${s.open247 ? 'checked' : ''}> Ouvert 7 j/7, 24 h/24 (affiché et traduit automatiquement)</label></div>
         <div class="field"><label for="sGoogle">Lien « Avis Google »</label><input id="sGoogle" type="url" pattern="https://.*" value="${esc(s.googleReviewUrl)}" placeholder="https://g.page/r/…/review"><small class="hint">Disponible dans votre fiche Google Business.</small></div>
       </div>
       <h2 class="h3 mb mt">Location : valeurs par défaut</h2>
@@ -878,7 +904,7 @@ function tabSettings(main) {
     if (g.value && !/^https:\/\//.test(g.value)) { g.setAttribute('aria-invalid', 'true'); g.focus(); toast('Le lien Google doit commencer par https://', 'error'); return; }
     if (!$('#sEmail').checkValidity()) { $('#sEmail').setAttribute('aria-invalid', 'true'); $('#sEmail').focus(); toast('E-mail invalide', 'error'); return; }
     write(() => Store.saveSettings({
-      email: $('#sEmail').value.trim(), address: $('#sAddr').value.trim(), hours: $('#sHours').value.trim(), googleReviewUrl: g.value.trim(),
+      email: $('#sEmail').value.trim(), address: $('#sAddr').value.trim(), hours: $('#sHours').value.trim(), open247: $('#sOpen').checked, googleReviewUrl: g.value.trim(),
       kmPerDay: Number($('#sKm').value) || CONFIG.defaultKmPerDay, extraKm: $('#sExtra').value === '' ? null : Number($('#sExtra').value),
     }));
     toast('Paramètres enregistrés', 'success');

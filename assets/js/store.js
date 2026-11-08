@@ -9,7 +9,7 @@
 import { CONFIG } from './config.js';
 import { uid, iso, addDays, today, safeStorage } from './utils.js';
 
-const VERSION = 2;
+const VERSION = 4;
 
 function seed() {
   const d0 = today();
@@ -17,19 +17,63 @@ function seed() {
   const now = new Date().toISOString();
   const base = { createdAt: now, updatedAt: now, photos: [], internalNote: '' };
 
+  const P = 'assets/img/vehicles/bmw-m135i/';
   const leasing = [
-    { ...base, id: uid(), status: 'available', featured: true, brand: 'Volkswagen', model: 'Golf R', version: '2.0 TSI 4MOTION DSG', year: 2022, firstReg: '2022-04', km: 38000, body: 'berline', fuel: 'essence', gearbox: 'auto', drive: 'integrale', powerHp: 320, engineCc: 1984, seats: 5, doors: 5, luggage: 341, colorExt: 'Noir', colorInt: 'Tissu noir', consumption: '8.1 l/100 km', co2: 184, energyLabel: 'G', equipment: ['clim_auto', 'gps', 'carplay', 'android_auto', 'camera', 'radar', 'acc', 'sieges_chauffants', 'led', 'jantes', 'keyless'], description: 'Annonce de démonstration. Véhicule entretenu, carnet à jour.', monthly: 689, takeover: 4000, monthsLeft: 24, endDate: '2028-10', kmPerYear: 15000, lessor: '', residual: 28500, transferFee: 450 },
-    { ...base, id: uid(), status: 'available', featured: true, brand: 'Mercedes-AMG', model: 'A 35', version: '4MATIC', year: 2023, firstReg: '2023-02', km: 21500, body: 'berline', fuel: 'essence', gearbox: 'auto', drive: 'integrale', powerHp: 306, engineCc: 1991, seats: 5, doors: 5, luggage: 370, colorExt: 'Blanc polaire', colorInt: 'Similicuir noir', consumption: '8.4 l/100 km', co2: 192, energyLabel: 'G', equipment: ['clim_auto', 'gps', 'carplay', 'camera', 'radar', 'led', 'jantes', 'sieges_chauffants', 'audio'], description: 'Annonce de démonstration.', monthly: 749, takeover: 5000, monthsLeft: 30, endDate: '2029-04', kmPerYear: 15000, lessor: '', residual: 31000, transferFee: 450 },
-    { ...base, id: uid(), status: 'reserved', featured: true, brand: 'Mercedes-AMG', model: 'CLA 45 S', version: '4MATIC+ Coupé', year: 2022, firstReg: '2022-09', km: 29000, body: 'coupe', fuel: 'essence', gearbox: 'auto', drive: 'integrale', powerHp: 421, engineCc: 1991, seats: 5, doors: 4, luggage: 460, colorExt: 'Gris montagne', colorInt: 'Cuir noir', consumption: '9.1 l/100 km', co2: 207, energyLabel: 'G', equipment: ['clim_auto', 'gps', 'carplay', 'camera360', 'radar', 'acc', 'cuir', 'toit_pano', 'led', 'jantes', 'keyless', 'audio', 'hud'], description: 'Annonce de démonstration.', monthly: 995, takeover: 7500, monthsLeft: 18, endDate: '2028-04', kmPerYear: 12000, lessor: '', residual: 42000, transferFee: 450 },
-    { ...base, id: uid(), status: 'available', featured: false, brand: 'Audi', model: 'RS3 Sportback', version: '2.5 TFSI quattro', year: 2023, firstReg: '2023-06', km: 12000, body: 'berline', fuel: 'essence', gearbox: 'auto', drive: 'integrale', powerHp: 400, engineCc: 2480, seats: 5, doors: 5, luggage: 282, colorExt: 'Gris Nardo', colorInt: 'Alcantara noir', consumption: '9.0 l/100 km', co2: 205, energyLabel: 'G', equipment: ['clim_auto', 'gps', 'carplay', 'android_auto', 'camera', 'radar', 'acc', 'sieges_chauffants', 'led', 'jantes', 'audio', 'angle_mort'], description: 'Annonce de démonstration.', monthly: 1090, takeover: 8000, monthsLeft: 36, endDate: '2029-10', kmPerYear: 10000, lessor: '', residual: 45000, transferFee: 450 },
-    { ...base, id: uid(), status: 'available', featured: false, brand: 'Tesla', model: 'Model Y', version: 'Long Range AWD', year: 2023, firstReg: '2023-03', km: 34000, body: 'suv', fuel: 'electrique', gearbox: 'auto', drive: 'integrale', powerHp: 514, engineCc: null, seats: 5, doors: 5, luggage: 854, colorExt: 'Bleu', colorInt: 'Similicuir noir', consumption: '16.9 kWh/100 km', co2: 0, energyLabel: 'A', equipment: ['clim_auto', 'gps', 'bluetooth', 'camera', 'acc', 'lane', 'sieges_chauffants', 'toit_pano', 'keyless', 'hayon', 'chargeur_induction'], description: 'Annonce de démonstration.', monthly: 629, takeover: 3000, monthsLeft: 22, endDate: '2028-08', kmPerYear: 20000, lessor: '', residual: 26000, transferFee: 450 },
+    {
+      ...base, id: uid(), offerType: 'financing', status: 'available', featured: true,
+      brand: 'BMW', model: 'M135i xDrive', version: 'LCI · Pack M Sport', year: 2015, firstReg: '2014-04', km: 164000,
+      body: 'compacte', fuel: 'essence', gearbox: 'auto', drive: 'integrale', powerHp: 370, engineCc: 2979, seats: 5, doors: 3, luggage: 360,
+      colorExt: 'Noir métallisé', colorInt: '', consumption: '', co2: null, energyLabel: '',
+      equipment: ['acc', 'lane', 'lane_change', 'front_assist', 'proactive', 'traffic_sign', 'radar', 'park_assist', 'camera', 'gps', 'paddles'],
+      photos: [`${P}couverture.webp`, `${P}arriere.webp`, `${P}interieur.webp`, `${P}volant.webp`, `${P}avant.webp`],
+      description: "BMW M135i xDrive LCI avec Pack M Sport, boîte automatique et transmission intégrale.\nVéhicule suisse, expertise (MFK) et service récents.\nGarantie jusqu'à 24 mois possible. Service gratuit jusqu'à 10 ans possible.",
+      salePrice: 14900, monthly: 159, monthlyNoDeposit: 245, downPayment: null, durationMonths: null, rate: null, lessor: '',
+      warrantyMonths: 24, mfkFresh: true, serviceFresh: true, swiss: true,
+      takeover: null, monthsLeft: null, endDate: '', kmPerYear: null, transferFee: null, residual: null,
+      internalNote: "Annonce d'origine : « Les roues sont en prévente, les deux avant sont peintes en noir » (à clarifier).\nÀ compléter : montant de l'acompte, durée, taux annuel effectif et société de leasing (obligatoires dans une publicité de leasing).\n370 ch annoncés (326 ch d'origine) : vérifier si préparation homologuée.",
+    },
+    {
+      ...base, id: uid(), offerType: 'financing', status: 'available', featured: true,
+      brand: 'Mercedes-Benz', model: 'A 180 d', version: 'Progressive', year: null, firstReg: '', km: null,
+      body: 'compacte', fuel: 'diesel', gearbox: '', drive: 'traction', powerHp: null, engineCc: null, seats: 5, doors: 5, luggage: null,
+      colorExt: 'Blanc', colorInt: '', consumption: '', co2: null, energyLabel: '',
+      equipment: ['led', 'clim_auto', 'camera', 'radar', 'front_assist', 'attention', 'keyless'],
+      photos: ['A/avant.webp', 'A/arriere.webp', 'A/arriere-2.webp', 'A/interieur.webp', 'A/ecran.webp', 'A/phare.webp'].map((x) => x.replace('A/', 'assets/img/vehicles/mercedes-a180d/')),
+      description: "Mercedes-Benz A 180 d Progressive.\nExpertise (MFK) récente, garantie, leasing et financement possibles.",
+      salePrice: null, monthly: 259, monthlyNoDeposit: null, downPayment: null, durationMonths: null, rate: null, lessor: '',
+      warranty: true, warrantyMonths: null, mfkFresh: true, serviceFresh: false, swiss: false,
+      takeover: null, monthsLeft: null, endDate: '', kmPerYear: null, transferFee: null, residual: null,
+      internalNote: "Infos en attente : année, kilométrage, boîte, prix comptant, conditions du leasing (acompte, durée, taux, société). Équipements repris des photos, à vérifier.",
+    },
+    {
+      ...base, id: uid(), offerType: 'financing', status: 'available', featured: true,
+      brand: 'Mercedes-AMG', model: 'S 63 Coupé', version: '', year: null, firstReg: '', km: null,
+      body: 'coupe', fuel: 'essence', gearbox: 'auto', drive: '', powerHp: null, engineCc: null, seats: 4, doors: 2, luggage: null,
+      colorExt: 'Blanc', colorInt: '', consumption: '', co2: null, energyLabel: '',
+      equipment: ['led', 'radar'],
+      photos: [1, 2, 3, 4, 5, 6, 7].map((i) => `assets/img/vehicles/mercedes-s63/${i === 1 ? 'couverture' : i - 1}.webp`),
+      description: 'Mercedes-AMG S 63 Coupé. Informations détaillées sur demande.',
+      salePrice: null, monthly: null, monthlyNoDeposit: null, downPayment: null, durationMonths: null, rate: null, lessor: '',
+      warranty: false, warrantyMonths: null, mfkFresh: false, serviceFresh: false, swiss: false,
+      takeover: null, monthsLeft: null, endDate: '', kmPerYear: null, transferFee: null, residual: null,
+      internalNote: 'Aucune information reçue pour le moment (prix, année, km, équipements). Affiché « Prix sur demande ».',
+    },
   ];
 
+  const T = 'assets/img/vehicles/audi-tt-rs/';
   const rentals = [
-    { ...base, id: uid(), status: 'available', brand: 'Volkswagen', model: 'Polo', version: '1.0 TSI', year: 2023, km: 18000, body: 'citadine', fuel: 'essence', gearbox: 'auto', drive: 'traction', powerHp: 95, seats: 5, doors: 5, luggage: 351, colorExt: 'Blanc', colorInt: 'Tissu', consumption: '5.6 l/100 km', equipment: ['clim', 'carplay', 'bluetooth', 'radar', 'regulateur'], description: 'Annonce de démonstration. Idéale en ville.', priceDay: 89, priceWeekend: 170, priceWeek: 520, kmPerDay: 150, extraKm: null, deposit: 0, minAge: 18, licenseYears: 1, blocked: [{ from: rel(3), to: rel(5), reason: 'Réservé' }, { from: rel(12), to: rel(13), reason: 'Réservé' }] },
-    { ...base, id: uid(), status: 'available', brand: 'Mercedes-Benz', model: 'Classe A 200', version: 'AMG Line', year: 2023, km: 26000, body: 'berline', fuel: 'essence', gearbox: 'auto', drive: 'traction', powerHp: 163, seats: 5, doors: 5, luggage: 370, colorExt: 'Blanc polaire', colorInt: 'Similicuir', consumption: '6.2 l/100 km', equipment: ['clim_auto', 'gps', 'carplay', 'camera', 'radar', 'led', 'jantes'], description: 'Annonce de démonstration.', priceDay: 129, priceWeekend: 245, priceWeek: 760, kmPerDay: 150, extraKm: null, deposit: 0, minAge: 18, licenseYears: 1, blocked: [{ from: rel(7), to: rel(9), reason: 'Réservé' }] },
-    { ...base, id: uid(), status: 'available', brand: 'Volkswagen', model: 'Tiguan', version: '2.0 TDI 4MOTION', year: 2022, km: 41000, body: 'suv', fuel: 'diesel', gearbox: 'auto', drive: 'integrale', powerHp: 150, seats: 5, doors: 5, luggage: 615, colorExt: 'Gris', colorInt: 'Tissu', consumption: '6.1 l/100 km', equipment: ['clim_auto', 'gps', 'carplay', 'camera', 'radar', 'acc', 'attelage', 'hayon'], description: 'Annonce de démonstration. Grand coffre, idéal en famille.', priceDay: 149, priceWeekend: 280, priceWeek: 880, kmPerDay: 150, extraKm: null, deposit: 0, minAge: 18, licenseYears: 1, blocked: [{ from: rel(1), to: rel(2), reason: 'Réservé' }, { from: rel(18), to: rel(20), reason: 'Entretien' }] },
-    { ...base, id: uid(), status: 'available', brand: 'Mercedes-AMG', model: 'CLA 45 S', version: '4MATIC+', year: 2022, km: 33000, body: 'coupe', fuel: 'essence', gearbox: 'auto', drive: 'integrale', powerHp: 421, seats: 5, doors: 4, luggage: 460, colorExt: 'Gris montagne', colorInt: 'Cuir noir', consumption: '9.1 l/100 km', equipment: ['clim_auto', 'gps', 'carplay', 'camera360', 'cuir', 'toit_pano', 'audio', 'hud', 'led', 'jantes'], description: 'Annonce de démonstration.', priceDay: 290, priceWeekend: 550, priceWeek: 1690, kmPerDay: 150, extraKm: null, deposit: 0, minAge: 18, licenseYears: 1, blocked: [{ from: rel(5), to: rel(6), reason: 'Réservé' }] },
+    {
+      ...base, id: uid(), status: 'available', brand: 'Audi', model: 'TT RS Roadster', version: 'quattro', year: null, km: null,
+      body: 'cabriolet', fuel: 'essence', gearbox: 'auto', drive: 'integrale', powerHp: null, seats: 2, doors: 2, luggage: null,
+      colorExt: 'Blanc', colorInt: 'Cuir noir surpiqûres rouges', consumption: '',
+      equipment: ['cuir', 'led', 'radar', 'paddles', 'keyless', 'clim_auto'],
+      photos: [`${T}couverture.webp`, `${T}2.webp`, `${T}3.webp`, `${T}4.webp`, `${T}5.webp`, `${T}6.webp`],
+      description: 'Audi TT RS Roadster quattro. Capote électrique, intérieur cuir.',
+      priceDay: 250, dayWeekdaysOnly: true, kmPerDay: 250,
+      priceWeekend: 600, weekendFriday: true, kmWeekend: 500,
+      priceWeek: null, extraKm: null, deposit: 0, minAge: 18, licenseYears: 1, blocked: [],
+      internalNote: "Annoncé comme « R8 » par le client, mais les photos montrent une Audi TT RS Roadster (volant RS, compteur TT RS). Nom à confirmer. Plaques GE 529 297.",
+    },
   ];
 
   const washServices = [
@@ -75,7 +119,7 @@ function seed() {
     washRequests: [],
     reviews: [],
     messages: [],
-    settings: { kmPerDay: CONFIG.defaultKmPerDay, extraKm: null, googleReviewUrl: '', email: '', address: '', hours: '' },
+    settings: { kmPerDay: CONFIG.defaultKmPerDay, extraKm: null, googleReviewUrl: '', email: '', address: 'Route du Bois-de-Bay 105, 1242 Satigny', hours: '', open247: true },
   };
 }
 
